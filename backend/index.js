@@ -5,6 +5,7 @@ const User = require("./User");
 const jwt = require("jsonwebtoken");
 
 const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -31,8 +32,12 @@ const isAuthenticated = (req, res, next) => {
   }
 };
 
+app.get("/", (req, res) => {
+  res.render("/");
+});
+
 app.get("/Register", (req, res) => {
-    res.json({"text":"hi"})
+  res.json({ text: "hi" });
 });
 
 app.post("/Register", async (req, res) => {
@@ -75,7 +80,9 @@ app.post("/Login", (req, res) => {
               const token = jwt.sign({ username, password }, "jwtSecret", {
                 expiresIn: 300,
               });
-              res.json({ auth: true, token: token, suc: suc });
+              res.json({ auth: true, token: token }); //removed suc:suc from this line
+
+              //return res.redirect("Dashbord");
             } else {
               res.json({
                 auth: false,
@@ -89,7 +96,7 @@ app.post("/Login", (req, res) => {
   });
 });
 
-app.get("/dashboard", isAuthenticated, (req, res) => {
+app.get("/dashbord", isAuthenticated, (req, res) => {
   jwt.verify(req.token, "jwtSecret", (err, data) => {
     if (err) {
       res.json({
