@@ -19,25 +19,90 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-app.get("/Register", (req, res) => {});
+const isAuthenticated = (req, res, next) => {
+  const bearerHeader = req.get("Authorization");
+  if (typeof bearerHeader !== "undefined") {
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+    next();
+  } else {
+    res.sendStatus(403);
+  }
+};
+
+app.get("/Register", (req, res) => {
+    res.json({"text":"hi"})
+});
 
 app.post("/Register", async (req, res) => {
   const abc = User.findOne({ username: req.body.username }, (err, succ) => {
     if (succ === null) {
-        const bcd = User.findOne({ email: req.body.email }, (err, succ) => {
-            if (succ === null) {
-                const user = new User(req.body);
-                user.save();
-                console.log(user);
-            } else {
-              console.log("Email already Exist");
-            }
-          });
+      const bcd = User.findOne({ email: req.body.email }, (err, succ) => {
+        if (succ === null) {
+          const user = new User(req.body);
+          user.save();
+          console.log(user);
+          res.redirect("/Login");
+        } else {
+          console.log("Email already Exist");
+        }
+      });
     } else {
       console.log("User already Exist");
     }
   });
- 
+});
+
+app.get("/Login", (req, res) => {});
+
+app.post("/Login", (req, res) => {
+  const abc = User.findOne({ username: req.body.username }, (err, succ) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (succ === null) {
+        console.log("Username INCORRECT!!!");
+      } else {
+        const bcd = User.findOne({ passworsd: req.body.password }, (err, suc) => {
+          if (succ === null) {
+            console.log("Password INCORRECT!!!");
+          } else {
+            console.log("DATA CORRECT");
+            if (succ) {
+              const username = req.body.username;
+              const password = req.body.password;
+              const token = jwt.sign({ username, password }, "jwtSecret", {
+                expiresIn: 300,
+              });
+              res.json({ auth: true, token: token, suc: suc });
+            } else {
+              res.json({
+                auth: false,
+                message: "Wrong username/password",
+              });
+            }
+          }
+        });
+      }
+    }
+  });
+});
+
+app.get("/dashboard", isAuthenticated, (req, res) => {
+  jwt.verify(req.token, "jwtSecret", (err, data) => {
+    if (err) {
+      res.json({
+        message: "unauthorized",
+        status: 403,
+      });
+    } else {
+      res.json({
+        text: "this is Protected",
+        data: data,
+      });
+    }
+  });
 });
 
 const port = process.env.PORT || 3000;
