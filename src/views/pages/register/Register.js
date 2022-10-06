@@ -70,11 +70,17 @@ const Register = () => {
                       placeholder="Username"
                       autoComplete="username"
                       onChange={handleUserName}
+                      value={username}
                     />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>@</CInputGroupText>
-                    <CFormInput onChange={handleEmail} placeholder="Email" autoComplete="email"  />
+                    <CFormInput
+                      onChange={handleEmail}
+                      placeholder="Email"
+                      autoComplete="email"
+                      value={email}
+                    />
                   </CInputGroup>
                   <CInputGroup className="mb-3">
                     <CInputGroupText>
@@ -85,6 +91,7 @@ const Register = () => {
                       type="password"
                       placeholder="Password"
                       autoComplete="new-password"
+                      value={password}
                     />
                   </CInputGroup>
                   {/* <CInputGroup className="mb-4">
