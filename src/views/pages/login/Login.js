@@ -32,22 +32,21 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let token="";
+
     console.log("submitted");
     axios
       .post("/Login", {
         username: username,
-        password: password,
-        headers: {
-          Authorization: `Basic ${token}`,
-        },
+        password: password
       })
       .then((response) => {
-        console.log(response);
+        window.location = "/dashbord";
       })
       .catch((error) => {
         console.log(error);
       });
+
+      
   };
 
   return (
