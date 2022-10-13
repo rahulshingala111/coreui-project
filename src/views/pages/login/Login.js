@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
 import {
   CButton,
   CCard,
@@ -29,24 +31,32 @@ const Login = () => {
     console.log(e.target.value);
     setPassword(e.target.value);
   };
-
+  //jwt
+  //cookie
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    const token = jwt.sign({ username, password }, "jwtSecret", {
+      expiresIn: "24h",
+    });
+    cookie.serialize("token", token, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+    });
     console.log("submitted");
+   
     axios
       .post("/Login", {
         username: username,
-        password: password
+        password: password,
       })
       .then((response) => {
+        console.log(response);
+        response.setHeader("token");
         window.location = "/dashbord";
       })
       .catch((error) => {
         console.log(error);
       });
-
-      
   };
 
   return (
