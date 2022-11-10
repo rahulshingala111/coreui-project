@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import jwt from "jsonwebtoken";
-import cookie from "cookie";
+import cookies from "cookies";
+import { useCookies } from "react-cookie";
 import {
   CButton,
   CCard,
@@ -22,6 +23,7 @@ import { cilLockLocked, cilUser } from "@coreui/icons";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [cookies, setCookie] = useCookies(["user"]);
 
   const handleUserName = (e) => {
     console.log(e.target.value);
@@ -36,22 +38,23 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = jwt.sign({ username, password }, "jwtSecret", {
-      expiresIn: "24h",
+      expiresIn: "1h",
     });
-    cookie.serialize("token", token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-    });
+    console.log(token);
+    const data = {
+      username: username,
+      password: password,
+    };
+    //setCookie("token", token, { path: "/" });
     console.log("submitted");
-   
     axios
-      .post("/Login", {
-        username: username,
-        password: password,
+      .post("/Login", data, {
+        headers: {
+          "Set-Headers": setCookie("token", token, { path: "/" }),
+        },
       })
       .then((response) => {
         console.log(response);
-        response.setHeader("token");
         window.location = "/dashbord";
       })
       .catch((error) => {
@@ -100,7 +103,7 @@ const Login = () => {
                         </CButton>
                       </CCol>
                       <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
+                        <CButton color="link" className=" px-0">
                           Forgot password?
                         </CButton>
                       </CCol>

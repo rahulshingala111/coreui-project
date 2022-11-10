@@ -6,11 +6,13 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store from './store'
-
+import { CookiesProvider } from "react-cookie";
 createRoot(document.getElementById('root')).render(
+  <CookiesProvider>
   <Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>
+  </CookiesProvider>,
 )
 
 // If you want to start measuring performance in your app, pass a function
