@@ -1,4 +1,5 @@
 import React from "react";
+import { Outlet, Link } from "react-router-dom";
 import {
   CButton,
   CCol,
@@ -19,6 +20,9 @@ const home = () => {
           <CCol md={6}>
             <CButton color="success" href="/Login">Login</CButton><br />
             <CButton color="danger" href="/Register">Register</CButton>
+            <Link to="/Login">Login page </Link>
+            <Link to="/Register">Register page </Link>
+
             {/* <CInputGroup className="input-prepend">
               <CInputGroupText>
                 <CIcon icon={cilMagnifyingGlass} />

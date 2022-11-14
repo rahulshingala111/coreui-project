@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import jwt from "jsonwebtoken";
-import cookies from "cookies";
+
 import { useCookies } from "react-cookie";
 import {
   CButton,
@@ -40,6 +40,7 @@ const Login = () => {
     const token = jwt.sign({ username, password }, "jwtSecret", {
       expiresIn: "1h",
     });
+
     console.log(token);
     const data = {
       username: username,
@@ -48,9 +49,9 @@ const Login = () => {
     //setCookie("token", token, { path: "/" });
     console.log("submitted");
     axios
-      .post("/Login", data, {
+      .post("http://localhost:5000/Login", data, {
         headers: {
-          "Set-Headers": setCookie("token", token, { path: "/" }),
+          "Set-Headers": setCookie("token", token, { path: "/" })
         },
       })
       .then((response) => {

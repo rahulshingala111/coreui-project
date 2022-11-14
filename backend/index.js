@@ -7,7 +7,13 @@ const path = require("path");
 const { redirect } = require("react-router-dom");
 
 const app = express();
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", 'http://localhost:3000');  
+  res.setHeader("Access-Control-Request-Headers", 'Set-Headers');  
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,Set-Headers");  
 
+  next();
+});
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -26,9 +32,9 @@ db.once("open", () => {
 // app.get("/Register",(req,res)=>{
 //   res.render("/Register");
 // })
-app.get("/Login",(req,res)=>{
-  // res.render("/Login"); 
-})
+app.get("/Login", (req, res) => {
+  res.render("/Login");
+});
 const ifUserExist = function (req, res, next) {
   const isUser = User.findOne({ username: req.body.username }, (err, succ) => {
     if (err) {
@@ -73,8 +79,7 @@ app.post("/Login", ifUserExist, (req, res) => {
 });
 
 const isAuthenticated = (req, res, next) => {
-  let cookieHeader = req.headers.Cookie;
-  console.log(cookieHeader  );
+  let cookieHeader = req.headers.cookie;
   if (typeof cookieHeader !== "string") {
     cookieHeader = "";
   }
@@ -92,18 +97,19 @@ const isAuthenticated = (req, res, next) => {
           status: 403,
         });
       } else {
-        res.sendStatus(200).message('login succ');
-      
+        // res.sendStatus(200);
+        // window.location="/dashbord";
+        next();
       }
     });
-    next();
   }
 };
 app.get("/dashbord", isAuthenticated, (req, res) => {
-  res.sendStatus(200);
+  console.log("In Login Post");
+  res.render("/dashbord");
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`);
 });
