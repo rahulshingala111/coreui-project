@@ -29,7 +29,7 @@ class App extends Component {
           <Suspense fallback={loading}>
             <Routes>
               <Route path="/" name="Home" element={<Home />} />
-              <Route path="/dashbord" name="Dashbord" element={<Dashbord />} />
+              <Route path="/dashbord/" name="Dashbord" element={<Dashbord />} />
               <Route path="/login" name="Login Page" element={<Login />} />
               <Route path="/register" name="Register Page" element={<Register />} />
               <Route path="/*" name="Page 404" element={<Page404 />} />

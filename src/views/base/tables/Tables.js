@@ -16,10 +16,16 @@ import {
   CForm,
   CFormInput,
 } from "@coreui/react";
-import CIcon from "@coreui/icons-react";
-import { cilMagnifyingGlass } from "@coreui/icons";
 
 const Tables = (props) => {
+  const [searchUser, setSearchUser] = useState([]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    console.log(e.target.value);
+   
+  }
+
   return (
     <>
       <CRow>
@@ -30,7 +36,12 @@ const Tables = (props) => {
                 <div className="col h3">Table</div>
                 <div className="col-md-4">
                   <CForm>
-                    <CFormInput type="text" id="searchInput" placeholder="search" />
+                    <CFormInput
+                      type="text"
+                      id="searchInput"
+                      placeholder="Search"
+                      onChange={handleSubmit}
+                    />
                   </CForm>
                 </div>
               </div>
@@ -52,7 +63,7 @@ const Tables = (props) => {
                       <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
                       <CTableDataCell>{user._id}</CTableDataCell>
                       <CTableDataCell>{user.username}</CTableDataCell>
-                      <CTableDataCell>{user.email}</CTableDataCell>S
+                      <CTableDataCell>{user.email}</CTableDataCell>
                     </CTableRow>
                   ))}
                 </CTableBody>

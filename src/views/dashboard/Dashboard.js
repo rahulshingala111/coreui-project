@@ -207,11 +207,7 @@ const Dashboard = () => {
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
-            <div>
-              <Tables UserData={UserData} />
-            </div>
-            {/* <AppContent /> */}
-
+            <Tables UserData={UserData} />
             {/* <WidgetsDropdown /> */}
             {/* <CCard className="mb-4">
               <CCardBody>
@@ -497,7 +493,7 @@ const Dashboard = () => {
               </CCol>
             </CRow> */}
           </div>
-          {/* <AppFooter /> */}
+          <AppFooter />
         </div>
       </div>
     </>

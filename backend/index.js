@@ -5,6 +5,7 @@ const User = require("./User");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { redirect } = require("react-router-dom");
+const { log } = require("console");
 
 const app = express();
 app.use((req, res, next) => {
@@ -113,13 +114,12 @@ app.get("/dashbord", isAuthenticated, (req, res) => {
 });
 
 app.get("/dashbord/showUser", (req, res) => {
-  console.log("In shoeUser");
+  console.log("Inside /dashbord/showUser api");
   const users = User.find({}, (err, succ) => {
     if (err) {
       console.log("error in finding all user");
     } else {
-      console.log(succ);
-      res.send(succ)
+      res.send(succ);
     }
   });
 });
