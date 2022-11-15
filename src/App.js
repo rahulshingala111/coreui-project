@@ -1,3 +1,5 @@
+/* eslint-disable */
+import { layouts } from "chart.js";
 import React, { Component, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./scss/style.scss";
@@ -22,19 +24,20 @@ const Dashbord = React.lazy(() => import("./views/dashboard/Dashboard"));
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <Suspense fallback={loading}>
-          <Routes>
-            <Route path="/dashbord" name="Dashbord" element={<Dashbord />} />
-            <Route path="/login" name="Login Page" element={<Login />} />
-            <Route path="/register" name="Register Page" element={<Register />} />
-            <Route path="/404" name="Page 404" element={<Page404 />} />
-            <Route path="/500" name="Page 500" element={<Page500 />} />
-            <Route path="/" name="home" element={<Home />} />
-            <Route path="*" name="home" element={<DefaultLayout />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+      <>
+        <BrowserRouter>
+          <Suspense fallback={loading}>
+            <Routes>
+              <Route path="/" name="Home" element={<Home />} />
+              <Route path="/dashbord" name="Dashbord" element={<Dashbord />} />
+              <Route path="/login" name="Login Page" element={<Login />} />
+              <Route path="/register" name="Register Page" element={<Register />} />
+              <Route path="/*" name="Page 404" element={<Page404 />} />
+              <Route path="/500" name="Page 500" element={<Page500 />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </>
     );
   }
 }

@@ -38,7 +38,7 @@ const Register = () => {
     e.preventDefault();
     console.log("submitted");
     axios
-      .post("/register", {
+      .post("http://localhost:5000/register", {
         email: email,
         username: username,
         password: password,

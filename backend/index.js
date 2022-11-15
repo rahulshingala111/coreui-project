@@ -8,9 +8,12 @@ const { redirect } = require("react-router-dom");
 
 const app = express();
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", 'http://localhost:3000');  
-  res.setHeader("Access-Control-Request-Headers", 'Set-Headers');  
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,Set-Headers");  
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader("Access-Control-Request-Headers", "Set-Headers");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,Set-Headers"
+  );
 
   next();
 });
@@ -107,6 +110,18 @@ const isAuthenticated = (req, res, next) => {
 app.get("/dashbord", isAuthenticated, (req, res) => {
   console.log("In Login Post");
   res.render("/dashbord");
+});
+
+app.get("/dashbord/showUser", (req, res) => {
+  console.log("In shoeUser");
+  const users = User.find({}, (err, succ) => {
+    if (err) {
+      console.log("error in finding all user");
+    } else {
+      console.log(succ);
+      res.send(succ)
+    }
+  });
 });
 
 const port = process.env.PORT || 5000;
