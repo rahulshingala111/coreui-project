@@ -60,22 +60,7 @@ import axios from "axios";
 import Tables from "../base/tables/Tables";
 
 const Dashboard = () => {
-  const [UserData, setUserData] = useState([]);
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const getData = () => {
-    axios
-      .get("http://localhost:5000/dashbord/showUser")
-      .then((response) => {
-        setUserData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  
 
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -207,7 +192,7 @@ const Dashboard = () => {
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
-            <Tables UserData={UserData} />
+            <Tables />
             {/* <WidgetsDropdown /> */}
             {/* <CCard className="mb-4">
               <CCardBody>

@@ -16,15 +16,39 @@ import {
   CForm,
   CFormInput,
 } from "@coreui/react";
+import axios from "axios";
 
-const Tables = (props) => {
-  const [searchUser, setSearchUser] = useState([]);
+const Tables = () => {
+  const [data, setData] = useState([]);
+  const [filter, setFilter] = useState([]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    console.log(e.target.value);
-   
-  }
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = async () => {
+    await axios
+      .get("http://localhost:5000/dashbord/showUser")
+      .then((response) => {
+        setData(response.data);
+        setFilter(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const requestSearch = (searchedVal) => {
+    const filteredRows = data.filter((row) => {
+        return row.username.toString().toLowerCase().includes(searchedVal.toString().toLowerCase());
+    });
+    if (searchedVal.length < 1) {
+        setFilter(data)
+    }
+    else {
+        setFilter(filteredRows)
+    }
+  };
 
   return (
     <>
@@ -40,10 +64,10 @@ const Tables = (props) => {
                       type="text"
                       id="searchInput"
                       placeholder="Search"
-                      onChange={handleSubmit}
+                      onChange={(e) => requestSearch(e.target.value)}
                     />
                   </CForm>
-                </div>
+                </div>  
               </div>
             </CCardHeader>
             <CCardBody>
@@ -58,7 +82,7 @@ const Tables = (props) => {
                   </CTableRow>
                 </CTableHead>
                 <CTableBody>
-                  {props.UserData.map((user, index) => (
+                  {filter.map((user, index) => (
                     <CTableRow key={index}>
                       <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
                       <CTableDataCell>{user._id}</CTableDataCell>
