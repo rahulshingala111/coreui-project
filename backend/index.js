@@ -1,7 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookie = require("cookie");
-const User = require("./User");
+const User = require("./User");  //Scemma
+const Empl = require("./Employee"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { redirect } = require("react-router-dom");
@@ -21,6 +22,9 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+
+
 mongoose.connect("mongodb://localhost:27017/coreuidb", {
   useNewUrlParser: true,
   //useCreateIndex: true,
@@ -123,6 +127,35 @@ app.get("/dashbord/showUser", (req, res) => {
     }
   });
 });
+app.get("/dashbord/employee/showUser", (req, res) => {
+  console.log("Inside /dashbord/emplyee/showUser api");
+  const users = Empl.find({}, (err, succ) => {
+    if (err) {
+      console.log("error in finding all user");
+    } else {
+      res.send(succ);
+    }
+  });
+});
+app.post("/dashboard/addemployee/registeremployee", async (req, res) => {
+  const abc = Empl.findOne({ username: req.body.username }, (err, succ) => {
+    if (succ === null) {
+      const bcd = Empl.findOne({ email: req.body.email }, (err, succ) => {
+        if (succ === null) {
+          const user = new Empl(req.body);
+          user.save();
+          console.log(user);
+          res.sendStatus(200);
+        } else {
+          console.log("Email already Exist");
+        }
+      });
+    } else {
+      console.log("User already Exist");
+    }
+  });
+});
+
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

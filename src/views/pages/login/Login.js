@@ -57,7 +57,7 @@ const Login = () => {
       })
       .then((response) => {
         console.log(response);
-        window.location = "/dashbord";
+        window.location = "/dashboard";
       })
       .catch((error) => {
         console.log(error);
