@@ -38,6 +38,7 @@
     "cookies": "^0.8.0",
     "core-js": "^3.24.1",
     "formik": "^2.2.9",
+    "js-cookie": "^3.0.1",
     "jsonwebtoken": "^8.5.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
@@ -47,7 +48,8 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^4.0.3",
     "redux": "4.2.0",
-    "simplebar-react": "^2.4.1"
+    "simplebar-react": "^2.4.1",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",

@@ -34,8 +34,6 @@ const Login = () => {
     console.log(e.target.value);
     setPassword(e.target.value);
   };
-  //jwt
-  //cookie
   const handleSubmit = (e) => {
     e.preventDefault();
     const token = jwt.sign({ username, password }, "jwtSecret", {
@@ -47,12 +45,12 @@ const Login = () => {
       username: username,
       password: password,
     };
-    //setCookie("token", token, { path: "/" });
+
     console.log("submitted");
     axios
       .post("http://localhost:5000/Login", data, {
         headers: {
-          "Set-Headers": setCookie("token", token, { path: "/" })
+          "Set-Headers": setCookie("token", token, { path: "/"}),
         },
       })
       .then((response) => {

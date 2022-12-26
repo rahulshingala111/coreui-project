@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React, { useState } from "react";
 import axios from "axios";
-
 import {
   CButton,
   CCard,
@@ -16,9 +15,13 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
-import Dashboard from "src/views/dashboard/Dashboard";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
-const Register = () => {
+import { useCookies } from "react-cookie";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
+import cookie from "cookie";
+const Addemployee = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -41,8 +44,14 @@ const Register = () => {
     setContact(e.target.value);
   };
 
+  // useEffect(() => {
+  //   const createdBy = jwt.decode(Cookies.get("token"), { complete: true });
+  //   console.log(createdBy.payload.username);
+  // });
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    const createdBy = jwt.decode(Cookies.get("token"), { complete: true });
     console.log("submitted");
     axios
       .post("http://localhost:5000/dashboard/addemployee/registeremployee", {
@@ -50,11 +59,12 @@ const Register = () => {
         email: email,
         username: username,
         password: password,
+        createdBy: createdBy.payload.username,
       })
       .then(
         (response) => {
           console.log(response);
-          window.location = "/dashboard/employee";
+          //window.location = "/dashboard/employee";
         },
         (error) => {
           console.log(error);
@@ -88,7 +98,6 @@ const Register = () => {
                               value={username}
                             />
                           </CInputGroup>
-
                           <CInputGroup className="mb-3">
                             <CInputGroupText>@</CInputGroupText>
                             <CFormInput
@@ -140,5 +149,4 @@ const Register = () => {
     </>
   );
 };
-
-export default Register;
+export default Addemployee;

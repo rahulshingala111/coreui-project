@@ -58,6 +58,7 @@ const Employee = () => {
     <>
       <div>
         <AppSidebar />
+        
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
@@ -93,6 +94,7 @@ const Employee = () => {
                           <CTableHeaderCell scope="col">username</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                           <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">createdBy</CTableHeaderCell>
                           <CTableHeaderCell scope="col"></CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
@@ -104,6 +106,7 @@ const Employee = () => {
                             <CTableDataCell>{user.username}</CTableDataCell>
                             <CTableDataCell>{user.email}</CTableDataCell>
                             <CTableDataCell>{user.contact}</CTableDataCell>
+                            <CTableDataCell>{user.createdBy}</CTableDataCell>
                           </CTableRow>
                         ))}
                       </CTableBody>

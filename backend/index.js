@@ -1,13 +1,12 @@
+/* eslint-disable */
 const express = require("express");
 const mongoose = require("mongoose");
 const cookie = require("cookie");
-const User = require("./User");  //Scemma
-const Empl = require("./Employee"); //Scema
+const User = require("./schema/User"); //Scemma
+const Empl = require("./schema/Employee"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const { redirect } = require("react-router-dom");
 const { log } = require("console");
-
 const app = express();
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -16,14 +15,11 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,Set-Headers"
   );
-
   next();
 });
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-
 
 mongoose.connect("mongodb://localhost:27017/coreuidb", {
   useNewUrlParser: true,
@@ -36,32 +32,12 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-//-------------------------------------------------------
-// app.get("/Register",(req,res)=>{
-//   res.render("/Register");
-// })
+//------------------
+
 app.get("/Login", (req, res) => {
   res.render("/Login");
 });
-const ifUserExist = function (req, res, next) {
-  const isUser = User.findOne({ username: req.body.username }, (err, succ) => {
-    if (err) {
-      res.sendStatus(401).message("ERROR!!");
-    } else {
-      if (succ === null) {
-        res.sendStatus(401);
-      } else {
-        const isPassword = User.findOne({ passworsd: req.body.password }, (err, succ) => {
-          if (succ === null) {
-            res.sendStatus(401);
-          } else {
-            next();
-          }
-        });
-      }
-    }
-  });
-};
+
 app.post("/Register", async (req, res) => {
   const abc = User.findOne({ username: req.body.username }, (err, succ) => {
     if (succ === null) {
@@ -70,7 +46,7 @@ app.post("/Register", async (req, res) => {
           const user = new User(req.body);
           user.save();
           console.log(user);
-          res.redirect("/Login");
+          res.sendStatus(200);
         } else {
           console.log("Email already Exist");
         }
@@ -81,9 +57,25 @@ app.post("/Register", async (req, res) => {
   });
 });
 
-app.post("/Login", ifUserExist, (req, res) => {
+app.post("/Login", (req, res) => {
+  const isUser = User.find({ username: req.body.username }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401).message("ERROR!!");
+    } else {
+      if (succ === null) {
+        res.sendStatus(401);
+      } else {
+        const isPassword = User.find({ passworsd: req.body.password }, (err, succ) => {
+          if (succ === null) {
+            res.sendStatus(401);
+          } else {
+            res.sendStatus(200);
+          }
+        });
+      }
+    }
+  });
   console.log("In Login Post");
-  res.sendStatus(200);
 });
 
 const isAuthenticated = (req, res, next) => {
@@ -105,8 +97,6 @@ const isAuthenticated = (req, res, next) => {
           status: 403,
         });
       } else {
-        // res.sendStatus(200);
-        // window.location="/dashbord";
         next();
       }
     });
@@ -114,8 +104,10 @@ const isAuthenticated = (req, res, next) => {
 };
 app.get("/dashbord", isAuthenticated, (req, res) => {
   console.log("In Login Post");
-  res.render("/dashbord");
+  res.sendStatus(200);
 });
+
+//--------dashboard api for table show
 
 app.get("/dashbord/showUser", (req, res) => {
   console.log("Inside /dashbord/showUser api");
@@ -127,6 +119,7 @@ app.get("/dashbord/showUser", (req, res) => {
     }
   });
 });
+
 app.get("/dashbord/employee/showUser", (req, res) => {
   console.log("Inside /dashbord/emplyee/showUser api");
   const users = Empl.find({}, (err, succ) => {
@@ -137,27 +130,38 @@ app.get("/dashbord/employee/showUser", (req, res) => {
     }
   });
 });
-app.post("/dashboard/addemployee/registeremployee", async (req, res) => {
-  const abc = Empl.findOne({ username: req.body.username }, (err, succ) => {
+
+//--------Dasboard API
+
+app.get("/dashboard/addemployee", (req, res) => {
+  res.sendStatus(200);
+});
+app.post("/dashboard/addemployee/registeremployee", (req, res) => {
+  const abc = Empl.findOne({ password: req.body.password }, (err, succ) => {
     if (succ === null) {
-      const bcd = Empl.findOne({ email: req.body.email }, (err, succ) => {
+      const bcd = Empl.findOne({ username: req.body.username }, (err, succ) => {
         if (succ === null) {
-          const user = new Empl(req.body);
-          user.save();
-          console.log(user);
-          res.sendStatus(200);
+          const qwe = Empl.insertMany({
+            contact: req.body.contact,
+            email: req.body.email,
+            username: req.body.username,
+            password: req.body.password,
+            createdBy: req.body.createdBy,
+            // res.sendStatus(200);
+          });
         } else {
-          console.log("Email already Exist");
+          console.log(err);
+          res.sendStatus(401);
         }
       });
     } else {
-      console.log("User already Exist");
+      console.log(err);
+      res.sendStatus(401);
     }
   });
 });
 
-
-const port = process.env.PORT || 5000;
+const port = 5000;
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`);
 });
