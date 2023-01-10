@@ -122,13 +122,36 @@ app.get("/dashbord/showUser", (req, res) => {
 
 app.get("/dashbord/employee/showUser", (req, res) => {
   console.log("Inside /dashbord/emplyee/showUser api");
-  const users = Empl.find({}, (err, succ) => {
-    if (err) {
-      console.log("error in finding all user");
-    } else {
-      res.send(succ);
-    }
-  });
+  // const users = Empl.find({}, (err, succ) => {
+  //   if (err) {
+  //     console.log("error in finding all user");
+  //   } else {
+  //     const hello = Empl.aggregate([
+  //       {
+  //         $lookup: {
+  //           from: "User",
+  //           localField: "createdBy",
+  //           foreignField: "_id",
+  //           as: "keyId",
+  //         },
+  //       },
+  //     ]);
+  //     res.send(hello);
+  //     console.log(hello);
+  //   }
+  // });
+  const hello = Empl.aggregate([
+    {
+      $lookup: {
+        from: "User",
+        localField: "createdBy",
+        foreignField: "_id",
+        as: "keyId",
+      },
+    },
+  ]);
+  res.send(hello);
+  console.log(hello);
 });
 
 //--------Dasboard API
@@ -141,13 +164,20 @@ app.post("/dashboard/addemployee/registeremployee", (req, res) => {
     if (succ === null) {
       const bcd = Empl.findOne({ username: req.body.username }, (err, succ) => {
         if (succ === null) {
-          const qwe = Empl.insertMany({
-            contact: req.body.contact,
-            email: req.body.email,
-            username: req.body.username,
-            password: req.body.password,
-            createdBy: req.body.createdBy,
-            // res.sendStatus(200);
+          const abcd = User.findOne({ username: req.body.createdBy }, (err, succ) => {
+            if (err) {
+              console.log(err);
+            } else {
+              const CreatedBy = succ._id;
+              Empl.insertMany({
+                contact: req.body.contact,
+                email: req.body.email,
+                username: req.body.username,
+                password: req.body.password,
+                createdBy: CreatedBy,
+              });
+              res.sendStatus(200);
+            }
           });
         } else {
           console.log(err);
