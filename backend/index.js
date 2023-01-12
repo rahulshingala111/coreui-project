@@ -122,36 +122,23 @@ app.get("/dashbord/showUser", (req, res) => {
 
 app.get("/dashbord/employee/showUser", (req, res) => {
   console.log("Inside /dashbord/emplyee/showUser api");
-  // const users = Empl.find({}, (err, succ) => {
-  //   if (err) {
-  //     console.log("error in finding all user");
-  //   } else {
-  //     const hello = Empl.aggregate([
-  //       {
-  //         $lookup: {
-  //           from: "User",
-  //           localField: "createdBy",
-  //           foreignField: "_id",
-  //           as: "keyId",
-  //         },
-  //       },
-  //     ]);
-  //     res.send(hello);
-  //     console.log(hello);
-  //   }
-  // });
-  const hello = Empl.aggregate([
+  Empl.aggregate([
     {
       $lookup: {
-        from: "User",
-        localField: "createdBy",
+        from: "coreuiinstance",
+        localField: "username",
         foreignField: "_id",
         as: "keyId",
       },
     },
-  ]);
-  res.send(hello);
-  console.log(hello);
+  ])
+    .then((result) => {
+      console.log(result);
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 //--------Dasboard API
