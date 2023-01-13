@@ -106,7 +106,7 @@ const Employee = () => {
                             <CTableDataCell>{user.username}</CTableDataCell>
                             <CTableDataCell>{user.email}</CTableDataCell>
                             <CTableDataCell>{user.contact}</CTableDataCell>
-                            <CTableDataCell>{user.keyId.username}</CTableDataCell>
+                            <CTableDataCell>{user.result[0].username}</CTableDataCell>
                           </CTableRow>
                         ))}
                       </CTableBody>

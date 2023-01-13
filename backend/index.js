@@ -121,19 +121,17 @@ app.get("/dashbord/showUser", (req, res) => {
 });
 
 app.get("/dashbord/employee/showUser", (req, res) => {
-  console.log("Inside /dashbord/emplyee/showUser api");
   Empl.aggregate([
     {
       $lookup: {
-        from: "coreuiinstance",
-        localField: "username",
+        from: "coreuiinstances",
+        localField: "createdBy",
         foreignField: "_id",
-        as: "keyId",
+        as: "result",
       },
     },
   ])
     .then((result) => {
-      console.log(result);
       res.send(result);
     })
     .catch((err) => {

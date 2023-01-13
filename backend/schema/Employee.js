@@ -5,7 +5,7 @@ const UserSchema = mongoose.Schema({
   username: String,
   password: String,
   contact: String,
-  createdBy: String,
+  createdBy: mongoose.Schema.Types.ObjectId,
 });
 
 module.exports = mongoose.model("employee", UserSchema);
