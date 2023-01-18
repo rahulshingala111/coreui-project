@@ -22,10 +22,14 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
+import ReadRow from "./Components/ReadRow";
+import EditRow from "./Components/EditRow";
 
 const Employee = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
+
+  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     getData();
@@ -43,6 +47,8 @@ const Employee = () => {
       });
   };
 
+  const [editData, setEditData] = useState(data);
+
   const requestSearch = (searchedVal) => {
     const filteredRows = data.filter((row) => {
       return row.username.toString().toLowerCase().includes(searchedVal.toString().toLowerCase());
@@ -54,11 +60,16 @@ const Employee = () => {
     }
   };
 
+  const handleEdit = (event, user) => {
+    event.preventDefault();
+    setEditId(user._id);
+  };
+
   return (
     <>
       <div>
         <AppSidebar />
-        
+
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
@@ -90,24 +101,24 @@ const Employee = () => {
                       <CTableHead>
                         <CTableRow>
                           <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">_id</CTableHeaderCell>
+                          {/* <CTableHeaderCell scope="col">_id</CTableHeaderCell> */}
                           <CTableHeaderCell scope="col">username</CTableHeaderCell>
                           <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                           <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
                           <CTableHeaderCell scope="col">createdBy</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Edit</CTableHeaderCell>
                           <CTableHeaderCell scope="col"></CTableHeaderCell>
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
                         {filter.map((user, index) => (
-                          <CTableRow key={index}>
-                            <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
-                            <CTableDataCell>{user._id}</CTableDataCell>
-                            <CTableDataCell>{user.username}</CTableDataCell>
-                            <CTableDataCell>{user.email}</CTableDataCell>
-                            <CTableDataCell>{user.contact}</CTableDataCell>
-                            <CTableDataCell>{user.result[0].username}</CTableDataCell>
-                          </CTableRow>
+                          <>
+                            {editId === user._id ? (
+                              <EditRow />
+                            ) : (
+                              <ReadRow user={user} index={index} handleEdit={handleEdit} />
+                            )}
+                          </>
                         ))}
                       </CTableBody>
                     </CTable>
