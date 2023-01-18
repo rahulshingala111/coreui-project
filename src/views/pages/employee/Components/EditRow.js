@@ -21,7 +21,7 @@ import {
   CFormInput,
 } from "@coreui/react";
 
-const EditRow = ({ user, index }) => {
+const EditRow = ({ editData, handleEditChange }) => {
   return (
     <>
       <CTableRow>
@@ -32,6 +32,8 @@ const EditRow = ({ user, index }) => {
             required="required"
             placeholder="Enter username"
             name="username"
+            value={editData.username}
+            onChange={handleEditChange}
           ></CFormInput>
         </CTableHeaderCell>
 
@@ -41,6 +43,8 @@ const EditRow = ({ user, index }) => {
             required="required"
             placeholder="Enter email"
             name="email"
+            value={editData.email}
+            onChange={handleEditChange}
           ></CFormInput>
         </CTableDataCell>
 
@@ -50,6 +54,8 @@ const EditRow = ({ user, index }) => {
             required="required"
             placeholder="Enter contact"
             name="contact"
+            value={editData.contact}
+            onChange={handleEditChange}
           ></CFormInput>
         </CTableDataCell>
 

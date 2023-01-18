@@ -47,7 +47,11 @@ const Employee = () => {
       });
   };
 
-  const [editData, setEditData] = useState(data);
+  const [editData, setEditData] = useState({
+    username: "",
+    email: "",
+    contact: "",
+  });
 
   const requestSearch = (searchedVal) => {
     const filteredRows = data.filter((row) => {
@@ -63,6 +67,25 @@ const Employee = () => {
   const handleEdit = (event, user) => {
     event.preventDefault();
     setEditId(user._id);
+
+    const formValues = {
+      username: user.username,
+      email: user.email,
+      contact: user.contact,
+    };
+
+    setEditData(formValues);
+  };
+
+  const handleEditChange = (event) => {
+    event.preventDefault();
+    const fieldName = event.target.getAttribute("name");
+    const fieldValue = event.target.value;
+
+    const newFormData = { ...editData };
+    newFormData[fieldName] = fieldValue;
+
+    setEditData(newFormData);
   };
 
   return (
@@ -114,7 +137,7 @@ const Employee = () => {
                         {filter.map((user, index) => (
                           <>
                             {editId === user._id ? (
-                              <EditRow />
+                              <EditRow editData={editData} handleEditChange={handleEditChange} />
                             ) : (
                               <ReadRow user={user} index={index} handleEdit={handleEdit} />
                             )}
