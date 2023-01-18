@@ -46,7 +46,9 @@ const Employee = () => {
         console.log(error);
       });
   };
-
+  const [editRowUsername, setEditRowUsername] = useState("");
+  const [editRowEmail, setEditRowEmail] = useState("");
+  const [editRowContact, setEditRowContact] = useState("");
   const [editData, setEditData] = useState({
     username: "",
     email: "",
@@ -64,8 +66,8 @@ const Employee = () => {
     }
   };
 
-  const handleEdit = (event, user) => {
-    event.preventDefault();
+  const handleEdit = (e, user) => {
+    e.preventDefault();
     setEditId(user._id);
 
     const formValues = {
@@ -77,15 +79,50 @@ const Employee = () => {
     setEditData(formValues);
   };
 
-  const handleEditChange = (event) => {
-    event.preventDefault();
-    const fieldName = event.target.getAttribute("name");
-    const fieldValue = event.target.value;
+  // const handleEditRowUsername = (e) => {
+  //   e.preventDefault();
+  //   setEditRowUsername(e.target.value);
+  //   console.log(e.target.value);
+  // };
+  // const handleEditRowEmail = (e) => {
+  //   e.preventDefault();
+  //   setEditRowEmail(e.target.value);
+  //   console.log(e.target.value);
+  // };
+  // const handleEditRowContact = (e) => {
+  //   e.preventDefault();
+  //   setEditRowContact(e.target.value);
+  //   console.log(e.target.value);
+  // };
+
+  const handleEditRowChange = (e) => {
+    e.preventDefault();
+    const fieldName = e.target.getAttribute("name");
+    const fieldValue = e.target.value;
 
     const newFormData = { ...editData };
     newFormData[fieldName] = fieldValue;
 
     setEditData(newFormData);
+  };
+
+  const handleEditFormSubmit = (e) => {
+    e.preventDefault();
+
+    const editedContact = {
+      username: editData.username,
+      email: editData.email,
+      contact: editData.contact,
+    };
+
+    const newContacts = [...data];
+
+    const index = data.findIndex((data) => data.id === editId);
+
+    newContacts[index] = editedContact;
+
+    setData(newContacts);
+    setEditId(null);
   };
 
   return (
@@ -101,54 +138,60 @@ const Employee = () => {
                 Add
               </CButton>
             </div>
-            <CRow>
-              <CCol xs={12}>
-                <CCard className="mb-4">
-                  <CCardHeader>
-                    <div className="row">
-                      <div className="col h3">Table - Employee</div>
-                      <div className="col-md-4">
-                        <CForm>
+            <CForm onSubmit={handleEditFormSubmit}>
+              <CRow>
+                <CCol xs={12}>
+                  <CCard className="mb-4">
+                    <CCardHeader>
+                      <div className="row">
+                        <div className="col h3">Table - Employee</div>
+                        <div className="col-md-4">
                           <CFormInput
                             type="text"
                             id="searchInput"
                             placeholder="Search"
                             onChange={(e) => requestSearch(e.target.value)}
                           />
-                        </CForm>
+                        </div>
                       </div>
-                    </div>
-                  </CCardHeader>
-                  <CCardBody>
-                    <CTable striped hover>
-                      <CTableHead>
-                        <CTableRow>
-                          <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                          {/* <CTableHeaderCell scope="col">_id</CTableHeaderCell> */}
-                          <CTableHeaderCell scope="col">username</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Email</CTableHeaderCell>
-                          <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">createdBy</CTableHeaderCell>
-                          <CTableHeaderCell scope="col">Edit</CTableHeaderCell>
-                          <CTableHeaderCell scope="col"></CTableHeaderCell>
-                        </CTableRow>
-                      </CTableHead>
-                      <CTableBody>
-                        {filter.map((user, index) => (
-                          <>
-                            {editId === user._id ? (
-                              <EditRow editData={editData} handleEditChange={handleEditChange} />
-                            ) : (
-                              <ReadRow user={user} index={index} handleEdit={handleEdit} />
-                            )}
-                          </>
-                        ))}
-                      </CTableBody>
-                    </CTable>
-                  </CCardBody>
-                </CCard>
-              </CCol>
-            </CRow>
+                    </CCardHeader>
+                    <CCardBody>
+                      <CTable striped hover>
+                        <CTableHead>
+                          <CTableRow>
+                            <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                            {/* <CTableHeaderCell scope="col">_id</CTableHeaderCell> */}
+                            <CTableHeaderCell scope="col">username</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">Email</CTableHeaderCell>
+                            <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">createdBy</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">Edit</CTableHeaderCell>
+                            <CTableHeaderCell scope="col"></CTableHeaderCell>
+                          </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                          {filter.map((user, index) => (
+                            <>
+                              {editId === user._id ? (
+                                <EditRow
+                                  editData={editData}
+                                  handleEditRowChange={handleEditRowChange}
+                                  // handleEditRowUsername={handleEditRowUsername}
+                                  // handleEditRowEmail={handleEditRowEmail}
+                                  // handleEditRowContact={handleEditRowContact}
+                                />
+                              ) : (
+                                <ReadRow user={user} index={index} handleEdit={handleEdit} />
+                              )}
+                            </>
+                          ))}
+                        </CTableBody>
+                      </CTable>
+                    </CCardBody>
+                  </CCard>
+                </CCol>
+              </CRow>
+            </CForm>
           </div>
           <AppFooter />
         </div>
