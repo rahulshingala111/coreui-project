@@ -20,11 +20,11 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-mongoose.connect("mongodb://localhost:27017/coreuidb", {
+mongoose.set('strictQuery', true);
+mongoose.connect("mongodb://0.0.0.0:27017/coreuidb", {
   useNewUrlParser: true,
   //useCreateIndex: true,
-  useUnifiedTopology: true,
+  // useUnifiedTopology: true,
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
@@ -120,6 +120,8 @@ app.get("/dashbord/showUser", (req, res) => {
   });
 });
 
+
+
 app.get("/dashbord/employee/showUser", (req, res) => {
   Empl.aggregate([
     {
@@ -138,6 +140,15 @@ app.get("/dashbord/employee/showUser", (req, res) => {
       console.log(err);
     });
 });
+
+app.post("/dashbord/employee/updateUser", (req, res) => {
+  console.log("Inside /dashbord/update api");
+  console.log(req.body);
+    
+
+  res.sendStatus(200);
+});
+
 
 //--------Dasboard API
 

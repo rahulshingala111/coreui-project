@@ -22,14 +22,10 @@ import {
 } from "@coreui/react";
 import axios from "axios";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
-import ReadRow from "./Components/ReadRow";
-import EditRow from "./Components/EditRow";
 
 const Employee = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
-
-  const [editId, setEditId] = useState(null);
 
   useEffect(() => {
     getData();
@@ -46,14 +42,6 @@ const Employee = () => {
         console.log(error);
       });
   };
-  const [editRowUsername, setEditRowUsername] = useState("");
-  const [editRowEmail, setEditRowEmail] = useState("");
-  const [editRowContact, setEditRowContact] = useState("");
-  const [editData, setEditData] = useState({
-    username: "",
-    email: "",
-    contact: "",
-  });
 
   const requestSearch = (searchedVal) => {
     const filteredRows = data.filter((row) => {
@@ -64,65 +52,6 @@ const Employee = () => {
     } else {
       setFilter(filteredRows);
     }
-  };
-
-  const handleEdit = (e, user) => {
-    e.preventDefault();
-    setEditId(user._id);
-
-    const formValues = {
-      username: user.username,
-      email: user.email,
-      contact: user.contact,
-    };
-
-    setEditData(formValues);
-  };
-
-  // const handleEditRowUsername = (e) => {
-  //   e.preventDefault();
-  //   setEditRowUsername(e.target.value);
-  //   console.log(e.target.value);
-  // };
-  // const handleEditRowEmail = (e) => {
-  //   e.preventDefault();
-  //   setEditRowEmail(e.target.value);
-  //   console.log(e.target.value);
-  // };
-  // const handleEditRowContact = (e) => {
-  //   e.preventDefault();
-  //   setEditRowContact(e.target.value);
-  //   console.log(e.target.value);
-  // };
-
-  const handleEditRowChange = (e) => {
-    e.preventDefault();
-    const fieldName = e.target.getAttribute("name");
-    const fieldValue = e.target.value;
-
-    const newFormData = { ...editData };
-    newFormData[fieldName] = fieldValue;
-
-    setEditData(newFormData);
-  };
-
-  const handleEditFormSubmit = (e) => {
-    e.preventDefault();
-
-    const editedContact = {
-      username: editData.username,
-      email: editData.email,
-      contact: editData.contact,
-    };
-
-    const newContacts = [...data];
-
-    const index = data.findIndex((data) => data.id === editId);
-
-    newContacts[index] = editedContact;
-
-    setData(newContacts);
-    setEditId(null);
   };
 
   return (
@@ -138,7 +67,7 @@ const Employee = () => {
                 Add
               </CButton>
             </div>
-            <CForm onSubmit={handleEditFormSubmit}>
+            <CForm>
               <CRow>
                 <CCol xs={12}>
                   <CCard className="mb-4">
@@ -165,24 +94,26 @@ const Employee = () => {
                             <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                             <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
                             <CTableHeaderCell scope="col">createdBy</CTableHeaderCell>
-                            <CTableHeaderCell scope="col">Edit</CTableHeaderCell>
+                            <CTableHeaderCell scope="col">Action</CTableHeaderCell>
                             <CTableHeaderCell scope="col"></CTableHeaderCell>
                           </CTableRow>
                         </CTableHead>
                         <CTableBody>
                           {filter.map((user, index) => (
                             <>
-                              {editId === user._id ? (
-                                <EditRow
-                                  editData={editData}
-                                  handleEditRowChange={handleEditRowChange}
-                                  // handleEditRowUsername={handleEditRowUsername}
-                                  // handleEditRowEmail={handleEditRowEmail}
-                                  // handleEditRowContact={handleEditRowContact}
-                                />
-                              ) : (
-                                <ReadRow user={user} index={index} handleEdit={handleEdit} />
-                              )}
+                              <CTableRow key={index}>
+                                <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
+                                {/* <CTableDataCell>{user._id}</CTableDataCell> */}
+                                <CTableDataCell>{user.username}</CTableDataCell>
+                                <CTableDataCell>{user.email}</CTableDataCell>
+                                <CTableDataCell>{user.contact}</CTableDataCell>
+                                <CTableDataCell>{user.result[0].username}</CTableDataCell>
+                                <CTableDataCell>
+                                  <CButton color="info" href="/dashboard/editemployee">
+                                    Edit
+                                  </CButton>
+                                </CTableDataCell>
+                              </CTableRow>
                             </>
                           ))}
                         </CTableBody>
