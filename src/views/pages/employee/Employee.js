@@ -26,7 +26,9 @@ import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../component
 import { Link, useNavigate } from "react-router-dom";
 
 const Employee = () => {
+
   const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
 
@@ -61,7 +63,6 @@ const Employee = () => {
     <>
       <div>
         <AppSidebar />
-
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           <AppHeader />
           <div className="body flex-grow-1 px-3">
@@ -92,7 +93,6 @@ const Employee = () => {
                         <CTableHead>
                           <CTableRow>
                             <CTableHeaderCell scope="col">#</CTableHeaderCell>
-                            {/* <CTableHeaderCell scope="col">_id</CTableHeaderCell> */}
                             <CTableHeaderCell scope="col">username</CTableHeaderCell>
                             <CTableHeaderCell scope="col">Email</CTableHeaderCell>
                             <CTableHeaderCell scope="col"> Contact</CTableHeaderCell>
@@ -106,7 +106,6 @@ const Employee = () => {
                             <>
                               <CTableRow key={index}>
                                 <CTableHeaderCell scope="row"> {index + 1} </CTableHeaderCell>
-                                {/* <CTableDataCell>{user._id}</CTableDataCell> */}
                                 <CTableDataCell>{user.username}</CTableDataCell>
                                 <CTableDataCell>{user.email}</CTableDataCell>
                                 <CTableDataCell>{user.contact}</CTableDataCell>
@@ -128,15 +127,6 @@ const Employee = () => {
                                   >
                                     Edit
                                   </CButton>
-                                  {/* <a type="button" 
-                                    onClick={() => {
-                                      navigate("/dashboard/editemployee", {
-                                        state: { id: user._id, username: user.username },
-                                      });
-                                    }}
-                                  >
-                                    Link
-                                  </a> */}
                                 </CTableDataCell>
                               </CTableRow>
                             </>
