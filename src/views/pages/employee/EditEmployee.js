@@ -26,12 +26,10 @@ const EditEmployee = () => {
   const [contact, setContact] = useState("");
 
   const handleUserName = (e) => {
-    e.preventDefault();
     console.log(e.target.value);
     setUsername(e.target.value);
   };
   const handleEmail = (e) => {
-    e.preventDefault();
     console.log(e.target.value);
     setEmail(e.target.value);
   };
@@ -44,15 +42,19 @@ const EditEmployee = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("submitted");
+    console.log(username);
+    console.log(email);
+    console.log(contact);
     axios
-      .post("http://localhost:5000/dashboard/addemployee/registeremployee", {
+      .post("http://localhost:5000/dashboard/employee/editUser", {
+        id:location.state.id,
         contact: contact,
         email: email,
         username: username,
       })
       .then(
         (response) => {
-          console.log(response);
+          //console.log(response);
           window.location = "/dashboard/employee";
         },
         (error) => {
@@ -88,19 +90,16 @@ const EditEmployee = () => {
                               <CIcon icon={cilUser} />
                             </CInputGroupText>
                             <CFormInput
-                              placeholder="Username"
+                              placeholder={location.state.username}
                               autoComplete="username"
-                              // onChange={(e) => this.setState({ text: e.target.value })}
-                              value={username}
                               onChange={handleUserName}
                             />
                           </CInputGroup>
                           <CInputGroup className="mb-3">
                             <CInputGroupText>@</CInputGroupText>
                             <CFormInput
-                              placeholder="Email"
+                              placeholder={location.state.email}
                               autoComplete="email"
-                              value={email}
                               onChange={handleEmail}
                             />
                           </CInputGroup>
@@ -109,9 +108,8 @@ const EditEmployee = () => {
                               <CIcon icon={cilUser} />
                             </CInputGroupText>
                             <CFormInput
-                              placeholder="Contact No."
+                              placeholder={location.state.contact}
                               autoComplete="contect"
-                              value={contact}
                               onChange={handleContact}
                             />
                           </CInputGroup>

@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-mongoose.set('strictQuery', true);
+mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://0.0.0.0:27017/coreuidb", {
   useNewUrlParser: true,
   //useCreateIndex: true,
@@ -120,8 +120,6 @@ app.get("/dashbord/showUser", (req, res) => {
   });
 });
 
-
-
 app.get("/dashbord/employee/showUser", (req, res) => {
   Empl.aggregate([
     {
@@ -141,14 +139,26 @@ app.get("/dashbord/employee/showUser", (req, res) => {
     });
 });
 
-app.post("/dashbord/employee/updateUser", (req, res) => {
-  console.log("Inside /dashbord/update api");
-  console.log(req.body);
-    
-
-  res.sendStatus(200);
+app.post("/dashboard/employee/editUser", (req, res) => {
+  const finduser = Empl.findById({ _id: req.body.id }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401).message("ERROR finding user!!");
+    } else {
+      var myquery = { username: succ.username, email: succ.email, contact: succ.contact };
+      var newvalues = {
+        $set: { username: req.body.username, email: req.body.email, contact: req.body.contact },
+      };
+      Empl.updateMany(myquery, newvalues, (err, succ) => {
+        if (err) {
+          res.sendStatus(401).message("ERROR in updating user!!");
+        } else {
+          res.sendStatus(200);
+          console.log("Updated successfuly");
+        }
+      });
+    }
+  });
 });
-
 
 //--------Dasboard API
 
