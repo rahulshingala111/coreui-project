@@ -4,9 +4,11 @@ const mongoose = require("mongoose");
 const cookie = require("cookie");
 const User = require("./schema/User"); //Scemma
 const Empl = require("./schema/Employee"); //Scema
+const Cate = require("./schema/Categories"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { log } = require("console");
+const Categories = require("./schema/Categories");
 const app = express();
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -115,7 +117,7 @@ app.get("/dashbord/showUser", (req, res) => {
     if (err) {
       console.log("error in finding all user");
     } else {
-      res.send(succ);
+      res.send();
     }
   });
 });
@@ -193,6 +195,57 @@ app.post("/dashboard/addemployee/registeremployee", (req, res) => {
     } else {
       console.log(err);
       res.sendStatus(401);
+    }
+  });
+});
+
+//----- E-COMMERCE API --------------------------
+
+app.get("/dashbord/showcategory", (req, res) => {
+  console.log("Inside /dashbord/showCategory api");
+  const users = Cate.find({}, (err, succ) => {
+    if (err) {
+      console.log("error in finding all category");
+    } else {
+      res.send(succ);
+    }
+  });
+});
+
+app.post("/dashbord/addcategory", (req, res) => {
+  const add = Cate.findOne({ category: req.body.category }, (err, succ) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (succ === null) {
+        Cate.insertMany({
+          category: req.body.category,
+        });
+        res.sendStatus(200);
+      } else {
+        console.log("Category already exist!!");
+        res.sendStatus(401);
+      }
+    }
+  });
+});
+
+
+
+app.post("/dashbord/addproduct", (req, res) => {
+  const add = Cate.findOne({ product: req.body.category }, (err, succ) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (succ === null) {
+        Cate.insertMany({
+          product: req.body.product,
+        });
+        res.sendStatus(200);
+      } else {
+        console.log("product already exist!!");
+        res.sendStatus(401);
+      }
     }
   });
 });
