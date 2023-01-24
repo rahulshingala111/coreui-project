@@ -16,8 +16,11 @@ import {
 import CIcon from "@coreui/icons-react";
 import { cilLockLocked, cilUser } from "@coreui/icons";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
+import { useLocation } from "react-router-dom";
 
 const EditEmployee = () => {
+  const location = useLocation();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [contact, setContact] = useState("");
