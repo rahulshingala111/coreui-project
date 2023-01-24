@@ -23,7 +23,10 @@ import {
 import axios from "axios";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 
+import { Link, useNavigate } from "react-router-dom";
+
 const Employee = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState([]);
 
@@ -109,9 +112,31 @@ const Employee = () => {
                                 <CTableDataCell>{user.contact}</CTableDataCell>
                                 <CTableDataCell>{user.result[0].username}</CTableDataCell>
                                 <CTableDataCell>
-                                  <CButton color="info" href="/dashboard/editemployee">
+                                  <CButton
+                                    onClick={() => {
+                                      navigate("/dashboard/editemployee", {
+                                        state: {
+                                          id: user._id,
+                                          username: user.username,
+                                          email: user.email,
+                                          contact: user.contact,
+                                        },
+                                      });
+                                    }}
+                                    color="info"
+                                    href="/dashboard/editemployee"
+                                  >
                                     Edit
                                   </CButton>
+                                  {/* <a type="button" 
+                                    onClick={() => {
+                                      navigate("/dashboard/editemployee", {
+                                        state: { id: user._id, username: user.username },
+                                      });
+                                    }}
+                                  >
+                                    Link
+                                  </a> */}
                                 </CTableDataCell>
                               </CTableRow>
                             </>
