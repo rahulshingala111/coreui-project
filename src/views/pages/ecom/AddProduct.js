@@ -23,7 +23,7 @@ import {
 
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 
-const Product = () => {
+const AddProduct = () => {
   return (
     <>
       <div>
@@ -38,4 +38,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default AddProduct;

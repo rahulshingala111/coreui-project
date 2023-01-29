@@ -198,9 +198,8 @@ app.post("/dashboard/addemployee/registeremployee", (req, res) => {
   });
 });
 
-//------ Category nad Product APIs
+//------ Category and Product APIs
 app.get("/dashboard/category/showCategory", (req, res) => {
-  console.log("Inside /dashbord/showCategory api");
   Cate.find({}, (err, succ) => {
     if (err) {
       console.log("error in finding all category");

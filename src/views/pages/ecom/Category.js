@@ -51,11 +51,6 @@ const Category = () => {
     setCategory(e.target.value);
   };
 
-  // useEffect(() => {
-  //   const createdBy = jwt.decode(Cookies.get("token"), { complete: true });
-  //   console.log(createdBy.payload.username);
-  // });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("submitted");
@@ -65,7 +60,6 @@ const Category = () => {
       })
       .then(
         (response) => {
-          console.log(response);
           window.location = "/dashboard/category";
         },
         (error) => {
