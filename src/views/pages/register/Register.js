@@ -43,12 +43,14 @@ const Register = () => {
         username: username,
         password: password,
       })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      .then(
+        (response) => {
+          console.log(response);
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   };
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
