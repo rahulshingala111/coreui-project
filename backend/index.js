@@ -36,48 +36,93 @@ db.once("open", () => {
 
 //------------------
 
-app.get("/Login", (req, res) => {
-  res.render("/Login");
-});
-
-app.post("/Register", async (req, res) => {
-  const abc = User.findOne({ username: req.body.username }, (err, succ) => {
-    if (succ === null) {
-      const bcd = User.findOne({ email: req.body.email }, (err, succ) => {
-        if (succ === null) {
-          const user = new User(req.body);
-          user.save();
-          console.log(user);
-          res.sendStatus(200);
-        } else {
-          console.log("Email already Exist");
-        }
-      });
-    } else {
-      console.log("User already Exist");
-    }
-  });
-});
-
-app.post("/Login", (req, res) => {
-  const isUser = User.find({ username: req.body.username }, (err, succ) => {
+const checkUsername = (req, res, next) => {
+  User.findOne({ username: req.body.username }, (err, succ) => {
     if (err) {
-      res.sendStatus(401).message("ERROR!!");
+      res.sendStatus(401);
+      console.log(err);
+    } else if (succ !== null) {
+      res.sendStatus(401);
+      console.log("User Already Exist!!");
     } else {
-      if (succ === null) {
-        res.sendStatus(401);
-      } else {
-        const isPassword = User.find({ passworsd: req.body.password }, (err, succ) => {
-          if (succ === null) {
-            res.sendStatus(401);
-          } else {
-            res.sendStatus(200);
-          }
-        });
-      }
+      next();
     }
   });
-  console.log("In Login Post");
+};
+const checkEmail = (req, res, next) => {
+  User.findOne({ email: req.body.email }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
+    } else if (succ !== null) {
+      res.sendStatus(401);
+      console.log("Email Already Exist!!");
+    } else {
+      next();
+    }
+  });
+};
+
+const checkPassword = (req, res, next) => {
+  User.findOne({ password: req.body.password }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
+    } else if (succ !== null) {
+      res.sendStatus(401);
+      console.log("Password Wrong");
+    } else {
+      next();
+    }
+  });
+};
+
+app.post("/Register", checkUsername, checkEmail, (req, res) => {
+  try {
+    const user = new User(req.body);
+    user.save();
+    console.log(user);
+    res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(401);
+  }
+});
+const checkUsername2 = (req, res, next) => {
+  User.findOne({ username: req.body.username }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
+    } else if (succ !== null) {
+      next();
+    } else {
+      console.log(succ);
+      res.sendStatus(401);
+      console.log("User Already Exist!!");
+    }
+  });
+};
+const checkPassword2 = (req, res, next) => {
+  User.findOne({ password: req.body.password }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
+    } else if (succ !== null) {
+      next();
+    } else {
+      res.sendStatus(401);
+      console.log("Password Wrong");
+    }
+  });
+};
+
+app.post("/login", checkUsername2, checkPassword2, (req, res) => {
+  try {
+    res.sendStatus(200);
+  } catch (error) {
+    res.sendStatus(401);
+    console.log(error);
+  }
 });
 
 const isAuthenticated = (req, res, next) => {
@@ -112,8 +157,7 @@ app.get("/dashbord", isAuthenticated, (req, res) => {
 //--------dashboard api for table show
 
 app.get("/dashbord/showUser", (req, res) => {
-  console.log("Inside /dashbord/showUser api");
-  const users = User.find({}, (err, succ) => {
+  User.find({}, (err, succ) => {
     if (err) {
       console.log("error in finding all user");
     } else {
