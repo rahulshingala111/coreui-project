@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const cookie = require("cookie");
 const User = require("./schema/User"); //Scemma
 const Empl = require("./schema/Employee"); //Scema
+const Cate = require("./schema/Category"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { log } = require("console");
@@ -193,6 +194,34 @@ app.post("/dashboard/addemployee/registeremployee", (req, res) => {
     } else {
       console.log(err);
       res.sendStatus(401);
+    }
+  });
+});
+
+//------ Category nad Product APIs
+app.get("/dashboard/category/showCategory", (req, res) => {
+  console.log("Inside /dashbord/showCategory api");
+  Cate.find({}, (err, succ) => {
+    if (err) {
+      console.log("error in finding all category");
+    } else {
+      res.send(succ);
+    }
+  });
+});
+
+app.post("/dashboard/category/addcategory", (req, res) => {
+  Cate.findOne({ category: req.body.category }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else if (succ !== null) {
+      res.sendStatus(401);
+    } else {
+      Cate.insertMany({
+        category: req.body.category,
+      });
+      res.sendStatus(200);
     }
   });
 });
