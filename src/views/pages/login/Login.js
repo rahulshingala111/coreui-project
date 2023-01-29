@@ -48,7 +48,7 @@ const Login = () => {
 
     console.log("submitted");
     axios
-      .post("http://localhost:5000/Login", data, {
+      .post("http://localhost:5000/login", data, {
         headers: {
           "Set-Headers": setCookie("token", token, { path: "/"}),
         },

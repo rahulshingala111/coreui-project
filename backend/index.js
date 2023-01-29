@@ -269,7 +269,15 @@ app.post("/dashboard/category/addcategory", (req, res) => {
     }
   });
 });
-
+app.get("/dashboard/product/showproduct", (req, res) => {
+  Prod.find({}, (err, succ) => {
+    if (err) {
+      console.log("error in finding all category");
+    } else {
+      res.send(succ);
+    }
+  });
+});
 app.post("/dashboard/product/addproduct", (req, res) => {
   Prod.findOne({ itemname: req.body.itemname }, (err, succ) => {
     if (err) {
