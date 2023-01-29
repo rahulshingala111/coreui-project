@@ -5,6 +5,7 @@ const cookie = require("cookie");
 const User = require("./schema/User"); //Scemma
 const Empl = require("./schema/Employee"); //Scema
 const Cate = require("./schema/Category"); //Scema
+const Prod = require("./schema/Product"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const { log } = require("console");
@@ -219,6 +220,24 @@ app.post("/dashboard/category/addcategory", (req, res) => {
     } else {
       Cate.insertMany({
         category: req.body.category,
+      });
+      res.sendStatus(200);
+    }
+  });
+});
+
+app.post("/dashboard/product/addproduct", (req, res) => {
+  Prod.findOne({ itemname: req.body.itemname }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else if (succ !== null) {
+      res.sendStatus(401);
+    } else {
+      Prod.insertMany({
+        itemname: req.body.itemname,
+        category: req.body.category,
+        description: req.body.description,
       });
       res.sendStatus(200);
     }
