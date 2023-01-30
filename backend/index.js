@@ -8,7 +8,19 @@ const Cate = require("./schema/Category"); //Scema
 const Prod = require("./schema/Product"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const { log } = require("console");
+// //-------- image upload
+// const multer = require("multer");
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "Images");
+//   },
+//   filename: (req, file, cb) => {
+//     console.log(file);
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   },
+// });
+// const upload = multer({ storage: storage });
+
 const app = express();
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
@@ -57,20 +69,6 @@ const checkEmail = (req, res, next) => {
     } else if (succ !== null) {
       res.sendStatus(401);
       console.log("Email Already Exist!!");
-    } else {
-      next();
-    }
-  });
-};
-
-const checkPassword = (req, res, next) => {
-  User.findOne({ password: req.body.password }, (err, succ) => {
-    if (err) {
-      res.sendStatus(401);
-      console.log(err);
-    } else if (succ !== null) {
-      res.sendStatus(401);
-      console.log("Password Wrong");
     } else {
       next();
     }
@@ -286,6 +284,7 @@ app.post("/dashboard/product/addproduct", (req, res) => {
     } else if (succ !== null) {
       res.sendStatus(401);
     } else {
+      console.log(req.body.image);
       Prod.insertMany({
         itemname: req.body.itemname,
         category: req.body.category,
