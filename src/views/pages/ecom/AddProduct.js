@@ -34,7 +34,7 @@ const AddProduct = () => {
   const [itemname, setItemName] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
-
+  const [file, setFile] = useState();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -68,17 +68,20 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     axios
-      .post("http://localhost:5000/dashboard/product/addproduct", {
-        itemname: itemname,
-        category: category,
-        description: description,
-      })
+      .post(
+        "http://localhost:5000/dashboard/product/addproduct",
+        {
+          itemname: itemname,
+          category: category,
+          description: description,
+          file: file,
+        },
+      )
       .then(
         (response) => {
           console.log(response);
-          window.location = "/dashboard/product";
+          //window.location = "/dashboard/product";
         },
         (error) => {
           console.log(error);
@@ -105,21 +108,25 @@ const AddProduct = () => {
                           <CInputGroupText>
                             <CIcon icon={cilLayers} />
                           </CInputGroupText>
-                          <CFormInput placeholder="item name" onChange={handleItemName} />
+                          <CFormInput placeholder="item name" onChange={handleItemName} required />
                         </CInputGroup>
 
                         <CInputGroup className="mb-3">
                           <CInputGroupText>
                             <CIcon icon={cilImagePlus} />
                           </CInputGroupText>
-                          <CFormInput type="file" multiple />
+                          <CFormInput
+                            type="file"
+                            onChange={(e) => setFile(e.target.files[0])}
+                            required
+                          />
                         </CInputGroup>
 
                         <CInputGroup className="mb-3">
                           <CInputGroupText>
                             <CIcon icon={cilAlignLeft} />
                           </CInputGroupText>
-                          <CFormSelect id="itemCategory" onChange={handleCategory}>
+                          <CFormSelect id="itemCategory" onChange={handleCategory} required>
                             <option>Category</option>
                             {data.map((cat, index) => (
                               <>
@@ -139,8 +146,8 @@ const AddProduct = () => {
                             onChange={handleDescription}
                             id="itemdescription"
                             rows={3}
-                            required
                             placeholder="Must be 8-20 Character long"
+                            required
                           ></CFormTextarea>
                         </CInputGroup>
 

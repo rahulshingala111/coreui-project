@@ -19,7 +19,7 @@ import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../component
 import { useLocation } from "react-router-dom";
 
 const EditEmployee = () => {
-  const location = useLocation();
+  let location = useLocation();
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

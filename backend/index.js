@@ -284,12 +284,13 @@ app.post("/dashboard/product/addproduct", (req, res) => {
     } else if (succ !== null) {
       res.sendStatus(401);
     } else {
-      console.log(req.body.image);
-      Prod.insertMany({
-        itemname: req.body.itemname,
-        category: req.body.category,
-        description: req.body.description,
-      });
+      console.log(req.body.file);
+      console.log("hi");
+      // Prod.insertMany({
+      //   itemname: req.body.itemname,
+      //   category: req.body.category,
+      //   description: req.body.description,
+      // });
       res.sendStatus(200);
     }
   });

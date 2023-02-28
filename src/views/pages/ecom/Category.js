@@ -115,6 +115,7 @@ const Category = () => {
                                     autoComplete="category"
                                     onChange={handleCategory}
                                     value={category}
+                                    required
                                   />
                                 </CInputGroup>
                                 <div className="d-grid">
