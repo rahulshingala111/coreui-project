@@ -62,9 +62,24 @@ const AddProduct = () => {
     setCategory(e.target.value);
   };
 
-  const handleImage = (e) => {
-    console.log(e.target.value);
-    setFile(e.target.files[0]);
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const handleImage = async (e) => {
+    // console.log(e.target.value);
+    const filee = e.target.files[0];
+    const base64 = await convertToBase64(filee);
+    setFile(base64);
   };
 
   const handleDescription = (e) => {
@@ -74,7 +89,6 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(file);
 
     const config = {
       headers: {
@@ -96,7 +110,7 @@ const AddProduct = () => {
       .then(
         (response) => {
           console.log(response);
-          //window.location = "/dashboard/product";
+          window.location = "/dashboard/product";
         },
         (error) => {
           console.log(error);

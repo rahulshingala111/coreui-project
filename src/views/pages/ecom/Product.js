@@ -19,6 +19,7 @@ import {
   CTableRow,
   CForm,
   CFormInput,
+  CImage,
 } from "@coreui/react";
 import axios from "axios";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
@@ -67,6 +68,7 @@ const Product = () => {
                         <CTable striped hover>
                           <CTableHead>
                             <CTableRow>
+                              <CTableHeaderCell scope="col">Image</CTableHeaderCell>
                               <CTableHeaderCell scope="col">Item name</CTableHeaderCell>
                               <CTableHeaderCell scope="col">category</CTableHeaderCell>
                               <CTableHeaderCell scope="col"> description</CTableHeaderCell>
@@ -76,6 +78,7 @@ const Product = () => {
                             {data.map((user, index) => (
                               <>
                                 <CTableRow key={index}>
+                                 <CTableDataCell><CImage fluid rounded src={user.image} width={200} height={200}/></CTableDataCell>
                                   <CTableDataCell>{user.itemname}</CTableDataCell>
                                   <CTableDataCell>{user.category}</CTableDataCell>
                                   <CTableDataCell>{user.description}</CTableDataCell>

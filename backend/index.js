@@ -284,13 +284,11 @@ app.post("/dashboard/product/addproduct", upload.single("file"), (req, res) => {
     } else if (succ !== null) {
       res.sendStatus(401);
     } else {
-      console.log(req.file);
-      console.log("hi");
       Prod.insertMany({
         itemname: req.body.itemname,
         category: req.body.category,
         description: req.body.description,
-        image: req.file,
+        image: req.body.file,
       });
       res.sendStatus(200);
     }
