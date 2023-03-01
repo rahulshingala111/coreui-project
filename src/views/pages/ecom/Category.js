@@ -25,7 +25,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
-import { cilUser } from "@coreui/icons";
+import { cilUser, cilAlignLeft } from "@coreui/icons";
 import axios from "axios";
 
 const Category = () => {
@@ -35,6 +35,12 @@ const Category = () => {
 
   const [category, setCategory] = useState("");
   const [data, setData] = useState([]);
+
+  const [editedId, setEditedId] = useState("");
+  const [editedData, setEditedData] = useState("");
+
+  const [editedCategory, setEditedCategory] = useState("");
+  const [deletedCategory, setDeletedCategory] = useState("");
 
   const getData = async () => {
     await axios
@@ -58,16 +64,62 @@ const Category = () => {
       .post("http://localhost:5000/dashboard/category/addcategory", {
         category: category,
       })
-      .then(
-        (response) => {
-          window.location = "/dashboard/category";
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+      .then((response) => {
+        console.log(response);
+        window.location = "/dashboard/category";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
-  
+
+  const handleEdit = (e, user) => {
+    e.preventDefault();
+    setEditedId(user._id);
+    setEditedData(user.category);
+  };
+
+  const handleEditedCategory = (e) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    setEditedCategory(e.target.value);
+  };
+
+  const handleSave = () => {
+    axios
+      .post("http://localhost:5000/dashboard/category/editcategory", {
+        id: editedId,
+        editedCategory: editedCategory,
+      })
+      .then((response) => {
+        console.log(response);
+        window.location = "/dashboard/category";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleCancel = () => {
+    setEditedId(null);
+  };
+
+  const handleDeleteCategory = async (e, user) => {
+    e.preventDefault();
+
+    await axios
+      .post("http://localhost:5000/dashboard/category/deletecategory", {
+        id: user._id,
+        category: user.category,
+      })
+      .then((response) => {
+        console.log(response);
+        window.location = "/dashboard/category";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <>
       <div>
@@ -91,6 +143,26 @@ const Category = () => {
                             <>
                               <CTableRow key={index}>
                                 <CTableDataCell>{user.category}</CTableDataCell>
+                                <CTableDataCell>
+                                  <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <CButton
+                                      color="info"
+                                      variant="outline"
+                                      className="me-md-2"
+                                      onClick={(e) => handleEdit(e, user)}
+                                    >
+                                      Edit
+                                    </CButton>
+                                    <CButton
+                                      color="danger"
+                                      variant="outline"
+                                      className="me-md-2"
+                                      onClick={(e) => handleDeleteCategory(e, user)}
+                                    >
+                                      Delete
+                                    </CButton>
+                                  </div>
+                                </CTableDataCell>
                               </CTableRow>
                             </>
                           ))}
@@ -100,34 +172,85 @@ const Category = () => {
                   </CCard>
                 </CCol>
                 <CCol>
-                      <CRow className="justify-content-center">
-                        <CCol >
-                          <CCard className="mx-4">
-                            <CCardBody className="p-4">
-                              <CForm onSubmit={handleSubmit}>
-                                <h2 className="mb-4">Add Category</h2>
-                                <CInputGroup className="mb-4">
-                                  <CInputGroupText>
-                                    <CIcon icon={cilUser} />
-                                  </CInputGroupText>
-                                  <CFormInput
-                                    placeholder="Category"
-                                    autoComplete="category"
-                                    onChange={handleCategory}
-                                    value={category}
-                                    required
-                                  />
-                                </CInputGroup>
-                                <div className="d-grid">
-                                  <CButton type="submit" color="success">
-                                    Add
-                                  </CButton>
-                                </div>
-                              </CForm>
-                            </CCardBody>
-                          </CCard>
-                        </CCol>
-                      </CRow>
+                  {data.map((user) => (
+                    <>
+                      {editedId === user._id ? (
+                        <CRow key={user} className="justify-content-center">
+                          <CCol>
+                            <CCard className="mx-4">
+                              <CCardBody className="p-4">
+                                <CForm>
+                                  <h3 className="mb-4">Edit Category</h3>
+                                  <CInputGroup className="mb-3">
+                                    <CInputGroupText>
+                                      <CIcon icon={cilAlignLeft} />
+                                    </CInputGroupText>
+                                    <CFormInput
+                                      placeholder={user.category}
+                                      onChange={handleEditedCategory}
+                                      required
+                                    />
+                                  </CInputGroup>
+                                  <CRow>
+                                    <CCol>
+                                      <div className="d-grid gap-2 col-6 mx-auto">
+                                        <CButton
+                                          color="success"
+                                          variant="outline"
+                                          onClick={handleSave}
+                                        >
+                                          Save
+                                        </CButton>
+                                      </div>
+                                    </CCol>
+                                    <CCol>
+                                      <div className="d-grid gap-2 col-6 mx-auto">
+                                        <CButton
+                                          color="danger"
+                                          variant="outline"
+                                          onClick={handleCancel}
+                                        >
+                                          Cancel
+                                        </CButton>
+                                      </div>
+                                    </CCol>
+                                  </CRow>
+                                </CForm>
+                              </CCardBody>
+                            </CCard>
+                          </CCol>
+                        </CRow>
+                      ) : null}
+                    </>
+                  ))}
+                  <CRow className="justify-content-center">
+                    <CCol>
+                      <CCard className="mx-4">
+                        <CCardBody className="p-4">
+                          <CForm onSubmit={handleSubmit}>
+                            <h2 className="mb-4">Add Category</h2>
+                            <CInputGroup className="mb-4">
+                              <CInputGroupText>
+                                <CIcon icon={cilAlignLeft} />
+                              </CInputGroupText>
+                              <CFormInput
+                                placeholder="Category"
+                                autoComplete="category"
+                                onChange={handleCategory}
+                                value={category}
+                                required
+                              />
+                            </CInputGroup>
+                            <div className="d-grid">
+                              <CButton type="submit" color="success">
+                                Add
+                              </CButton>
+                            </div>
+                          </CForm>
+                        </CCardBody>
+                      </CCard>
+                    </CCol>
+                  </CRow>
                 </CCol>
               </CRow>
             </CContainer>

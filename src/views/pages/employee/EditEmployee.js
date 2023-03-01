@@ -41,10 +41,6 @@ const EditEmployee = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("submitted");
-    console.log(username);
-    console.log(email);
-    console.log(contact);
     axios
       .post("http://localhost:5000/dashboard/employee/editUser", {
         id:location.state.id,
@@ -54,7 +50,7 @@ const EditEmployee = () => {
       })
       .then(
         (response) => {
-          //console.log(response);
+          console.log(response);
           window.location = "/dashboard/employee";
         },
         (error) => {
@@ -62,13 +58,6 @@ const EditEmployee = () => {
         }
       );
   };
-  // const { state } = this.props.location;
-  // console.log(state)
-  // const UserName = location.state.username;
-  // const Email = location.state.email;
-  // const Contact = location.state.contact;
-  // const ID = location.state.id;
-
   return (
     <>
       <div>

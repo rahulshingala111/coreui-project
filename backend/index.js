@@ -11,6 +11,7 @@ const path = require("path");
 
 // //-------- image upload
 const multer = require("multer");
+const { log } = require("console");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/images");
@@ -267,6 +268,40 @@ app.post("/dashboard/category/addcategory", (req, res) => {
     }
   });
 });
+
+app.post("/dashboard/category/editcategory", (req, res) => {
+  finduser = Cate.findById({ _id: req.body.id }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401).message("ERROR finding user!!");
+    } else {
+      var myquery = { category: succ.category };
+      var newvalues = {
+        $set: { category: req.body.editedCategory },
+      };
+      Cate.updateMany(myquery, newvalues, (err, succ) => {
+        if (err) {
+          res.sendStatus(401).message("ERROR in updating user!!");
+        } else {
+          res.sendStatus(200);
+          console.log("Updated successfuly");
+        }
+      });
+    }
+  });
+});
+
+app.post("/dashboard/category/deletecategory", async (req, res) => {
+  Cate.findOneAndDelete({ category: req.body.category }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
+    } else {
+      res.sendStatus(200);
+      console.log("Deleted Successfuly");
+    }
+  });
+});
+
 app.get("/dashboard/product/showproduct", (req, res) => {
   Prod.find({}, (err, succ) => {
     if (err) {
