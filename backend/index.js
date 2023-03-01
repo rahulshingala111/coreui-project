@@ -330,6 +330,37 @@ app.post("/dashboard/product/addproduct", upload.single("file"), (req, res) => {
   });
 });
 
+app.post("/dashboard/employee/editproduct", upload.single("file"), (req, res) => {
+  Prod.findOne({ itemname: req.body.itemname }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401).message("ERROR finding user!!");
+    } else {
+      var myquery = {
+        itemname: succ.itemname,
+        file: succ.file,
+        description: succ.description,
+        category: succ.category,
+      };
+      var newvalues = {
+        $set: {
+          itemname: req.body.itemname,
+          file: req.body.file,
+          description: req.body.description,
+          category: req.body.category,
+        },
+      };
+      Prod.updateMany(myquery, newvalues, (err, succ) => {
+        if (err) {
+          res.sendStatus(401).message("ERROR in updating Product!!");
+        } else {
+          res.sendStatus(200);
+          console.log("Updated successfuly");
+        }
+      });
+    }
+  });
+});
+
 const port = 5000;
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`);

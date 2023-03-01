@@ -28,6 +28,7 @@ const EditEmployee = React.lazy(() => import("./views/pages/employee/EditEmploye
 const Category = React.lazy(() => import("./views/pages/ecom/Category"));
 const Product = React.lazy(() => import("./views/pages/ecom/Product"));
 const AddProduct = React.lazy(() => import("./views/pages/ecom/AddProduct"));
+const EditProduct = React.lazy(() => import("./views/pages/ecom/EditProduct"));
 
 
 class App extends Component {
@@ -49,6 +50,7 @@ class App extends Component {
               <Route exact path="/dashboard/category" name="Category" element={<Category />} />
               <Route exact path="/dashboard/product" name="Product" element={<Product />} />
               <Route exact path="/dashboard/product/addproduct" name="AddProduct" element={<AddProduct />} />
+              <Route exact path="/dashboard/product/editproduct" name="EditProduct" element={<EditProduct />} />
 
               <Route path="/*" name="Page 404" element={<Page404 />} />
               <Route path="/500" name="Page 500" element={<Page500 />} />

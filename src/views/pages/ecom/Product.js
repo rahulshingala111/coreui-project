@@ -24,8 +24,12 @@ import {
 import axios from "axios";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 
+import { Link, useNavigate } from "react-router-dom";
+
 const Product = () => {
   const [data, setData] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     getData();
@@ -41,7 +45,6 @@ const Product = () => {
         console.log(error);
       });
   };
-
   return (
     <>
       <div>
@@ -72,16 +75,43 @@ const Product = () => {
                               <CTableHeaderCell scope="col">Item name</CTableHeaderCell>
                               <CTableHeaderCell scope="col">category</CTableHeaderCell>
                               <CTableHeaderCell scope="col"> description</CTableHeaderCell>
+                              <CTableHeaderCell scope="col"></CTableHeaderCell>
                             </CTableRow>
                           </CTableHead>
                           <CTableBody>
                             {data.map((user, index) => (
                               <>
                                 <CTableRow key={index}>
-                                 <CTableDataCell><CImage fluid rounded src={user.image} width={200} height={200}/></CTableDataCell>
+                                  <CTableDataCell>
+                                    <CImage
+                                      fluid
+                                      rounded
+                                      src={user.image}
+                                      width={200}
+                                      height={200}
+                                    />
+                                  </CTableDataCell>
                                   <CTableDataCell>{user.itemname}</CTableDataCell>
                                   <CTableDataCell>{user.category}</CTableDataCell>
                                   <CTableDataCell>{user.description}</CTableDataCell>
+                                  <CTableDataCell>
+                                    <CButton
+                                      onClick={() => {
+                                        navigate("../dashboard/product/editproduct", {
+                                          state: {
+                                            id: user._id,
+                                            itemname: user.itemname,
+                                            category: user.category,
+                                            description: user.description,
+                                          },
+                                        });
+                                      }}
+                                      color="info"
+                                      href="/dashboard/product/editproduct"
+                                    >
+                                      Edit
+                                    </CButton>
+                                  </CTableDataCell>
                                 </CTableRow>
                               </>
                             ))}
