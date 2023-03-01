@@ -8,18 +8,18 @@ const Cate = require("./schema/Category"); //Scema
 const Prod = require("./schema/Product"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
+
 // //-------- image upload
-// const multer = require("multer");
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "Images");
-//   },
-//   filename: (req, file, cb) => {
-//     console.log(file);
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   },
-// });
-// const upload = multer({ storage: storage });
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "_" + file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
 
 const app = express();
 app.use((req, res, next) => {
@@ -276,7 +276,7 @@ app.get("/dashboard/product/showproduct", (req, res) => {
     }
   });
 });
-app.post("/dashboard/product/addproduct", (req, res) => {
+app.post("/dashboard/product/addproduct", upload.single("file"), (req, res) => {
   Prod.findOne({ itemname: req.body.itemname }, (err, succ) => {
     if (err) {
       console.log(err);
@@ -284,13 +284,14 @@ app.post("/dashboard/product/addproduct", (req, res) => {
     } else if (succ !== null) {
       res.sendStatus(401);
     } else {
-      console.log(req.body.file);
+      console.log(req.file);
       console.log("hi");
-      // Prod.insertMany({
-      //   itemname: req.body.itemname,
-      //   category: req.body.category,
-      //   description: req.body.description,
-      // });
+      Prod.insertMany({
+        itemname: req.body.itemname,
+        category: req.body.category,
+        description: req.body.description,
+        image: req.file,
+      });
       res.sendStatus(200);
     }
   });

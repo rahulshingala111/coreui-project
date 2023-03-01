@@ -61,6 +61,12 @@ const AddProduct = () => {
     console.log(e.target.value);
     setCategory(e.target.value);
   };
+
+  const handleImage = (e) => {
+    console.log(e.target.value);
+    setFile(e.target.files[0]);
+  };
+
   const handleDescription = (e) => {
     console.log(e.target.value);
     setDescription(e.target.value);
@@ -68,6 +74,14 @@ const AddProduct = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(file);
+
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
     axios
       .post(
         "http://localhost:5000/dashboard/product/addproduct",
@@ -77,6 +91,7 @@ const AddProduct = () => {
           description: description,
           file: file,
         },
+        config
       )
       .then(
         (response) => {
@@ -115,11 +130,7 @@ const AddProduct = () => {
                           <CInputGroupText>
                             <CIcon icon={cilImagePlus} />
                           </CInputGroupText>
-                          <CFormInput
-                            type="file"
-                            onChange={(e) => setFile(e.target.files[0])}
-                            required
-                          />
+                          <CFormInput type="file" onChange={handleImage} required />
                         </CInputGroup>
 
                         <CInputGroup className="mb-3">
