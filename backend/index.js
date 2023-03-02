@@ -354,6 +354,20 @@ app.post("/dashboard/category/deleteproduct", (req, res) => {
   });
 });
 
+//------------------mennu and cart -----------------------------------
+
+app.get("/dashboard/product/menu/showallitem", (req, res) => {
+  Prod.find({}, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else {
+      res.send(succ);
+    }
+  });
+});
+
+
 const port = 5000;
 app.listen(port, () => {
   console.log(`Listening to Port ${port}`);

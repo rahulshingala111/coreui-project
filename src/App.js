@@ -31,6 +31,9 @@ const Product = React.lazy(() => import("./views/pages/ecom/Product"));
 const AddProduct = React.lazy(() => import("./views/pages/ecom/AddProduct"));
 const EditProduct = React.lazy(() => import("./views/pages/ecom/EditProduct"));
 
+const Cart = React.lazy(() => import("./views/pages/cart/Cart"));
+const Menu = React.lazy(() => import("./views/pages/cart/Menu"));
+
 
 class App extends Component {
   render() {
@@ -60,6 +63,9 @@ class App extends Component {
               <Route exact path="/dashboard/product" name="Product" element={<Product />} />
               <Route exact path="/dashboard/product/addproduct" name="AddProduct" element={<AddProduct />} />
               <Route exact path="/dashboard/product/editproduct" name="EditProduct" element={<EditProduct />} />
+
+              <Route exact path="/dashboard/product/menu" name="Menu" element={<Menu />} />
+              <Route exact path="/dashboard/cart" name="Cart" element={<Cart />} />
 
               <Route path="/*" name="Page 404" element={<Page404 />} />
               <Route path="/500" name="Page 500" element={<Page500 />} />
