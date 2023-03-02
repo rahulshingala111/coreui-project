@@ -33,8 +33,8 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.static(path.join(__dirname, "..", "public")));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: false, parameterLimit: 50000 }));
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://0.0.0.0:27017/coreuidb", {
   useNewUrlParser: true,
@@ -330,33 +330,26 @@ app.post("/dashboard/product/addproduct", upload.single("file"), (req, res) => {
   });
 });
 
-app.post("/dashboard/employee/editproduct", upload.single("file"), (req, res) => {
-  Prod.findOne({ itemname: req.body.itemname }, (err, succ) => {
+app.post("/dashboard/product/editproduct", upload.single("file"), (req, res) => {
+  Prod.findByIdAndUpdate({ _id: req.body.id }, { "itemname": req.body.itemname, "category": req.body.category, "description": req.body.description, "image": req.body.file }, (err, succ) => {
     if (err) {
-      res.sendStatus(401).message("ERROR finding user!!");
+      res.sendStatus(401);
+      console.log(err);
+    }
+    else {
+      res.sendStatus(200);
+    }
+  })
+});
+
+app.post("/dashboard/category/deleteproduct", (req, res) => {
+  Prod.findByIdAndDelete({ _id: req.body.id }, (err, succ) => {
+    if (err) {
+      res.sendStatus(401);
+      console.log(err);
     } else {
-      var myquery = {
-        itemname: succ.itemname,
-        file: succ.file,
-        description: succ.description,
-        category: succ.category,
-      };
-      var newvalues = {
-        $set: {
-          itemname: req.body.itemname,
-          file: req.body.file,
-          description: req.body.description,
-          category: req.body.category,
-        },
-      };
-      Prod.updateMany(myquery, newvalues, (err, succ) => {
-        if (err) {
-          res.sendStatus(401).message("ERROR in updating Product!!");
-        } else {
-          res.sendStatus(200);
-          console.log("Updated successfuly");
-        }
-      });
+      res.sendStatus(200);
+      console.log("Deleted Successfuly");
     }
   });
 });

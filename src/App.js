@@ -3,6 +3,7 @@ import { layouts } from "chart.js";
 import React, { Component, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./scss/style.scss";
+import ReactLoading from 'react-loading';
 
 const loading = (
   <div className="pt-3 text-center">
@@ -36,7 +37,15 @@ class App extends Component {
     return (
       <>
         <BrowserRouter>
-          <Suspense fallback={loading}>
+          <Suspense fallback={<div> loading....
+            {/* <ReactLoading
+              className="abc"
+              type="bubbles"
+              color="#0000FF"
+              height={'50%'}
+              width={'50%'}
+            /> */}
+          </div>}>
             <Routes>
               <Route exact path="/" name="Home" element={<Home />} />
               <Route exact path="/dashboard" name="Dashboard" element={<Dashboard />} />

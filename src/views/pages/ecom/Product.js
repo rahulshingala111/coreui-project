@@ -45,6 +45,22 @@ const Product = () => {
         console.log(error);
       });
   };
+
+  const handleDelete = (e, user) => {
+    e.preventDefault();
+    console.log(user.itemname);
+    axios
+      .post("http://localhost:5000/dashboard/category/deleteproduct", {
+        id: user._id,
+      })
+      .then((response) => {
+        console.log(response);
+        window.location = "/dashboard/product";
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   return (
     <>
       <div>
@@ -110,6 +126,13 @@ const Product = () => {
                                       href="/dashboard/product/editproduct"
                                     >
                                       Edit
+                                    </CButton>
+                                  </CTableDataCell>
+                                  <CTableDataCell>
+                                    <CButton
+                                      color="danger"
+                                      onClick={(e) => handleDelete(e, user)}
+                                    >Delete
                                     </CButton>
                                   </CTableDataCell>
                                 </CTableRow>

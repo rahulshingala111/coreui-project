@@ -33,14 +33,13 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const EditProduct = () => {
-  
+
   let location = useLocation();
   const [itemname, setItemName] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [file, setFile] = useState();
   const [data, setData] = useState([]);
-
 
   useEffect(() => {
     getData();
@@ -81,7 +80,6 @@ const EditProduct = () => {
   };
 
   const handleImage = async (e) => {
-    // console.log(e.target.value);
     const filee = e.target.files[0];
     const base64 = await convertToBase64(filee);
     setFile(base64);
@@ -93,25 +91,23 @@ const EditProduct = () => {
   };
 
   const handleSubmit = (e) => {
+    console.log(location.state.id);
     e.preventDefault();
-
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-
     axios
       .post(
-        "http://localhost:5000/dashboard/product/addproduct",
+        "http://localhost:5000/dashboard/product/editproduct",
         {
-
+          id: location.state.id,
           itemname: itemname,
           category: category,
           description: description,
           file: file,
-        },
-        config
+        }
       )
       .then(
         (response) => {
@@ -123,7 +119,7 @@ const EditProduct = () => {
         }
       );
   };
-  // console.log(location.state.id);
+
   return (
     <>
       <div>
@@ -144,8 +140,7 @@ const EditProduct = () => {
                             <CIcon icon={cilLayers} />
                           </CInputGroupText>
                           <CFormInput
-                            // placeholder={location.state.itemname}
-                             placeholder="item name"
+                            placeholder={location.state.itemname}
                             onChange={handleItemName}
                             required
                           />
@@ -164,8 +159,7 @@ const EditProduct = () => {
                           </CInputGroupText>
                           <CFormSelect id="itemCategory" onChange={handleCategory} required>
                             <option>
-                            {/* {location.state.category} */}
-                            category
+                              {location.state.category}
                             </option>
                             {data.map((cat, index) => (
                               <>
@@ -185,8 +179,7 @@ const EditProduct = () => {
                             onChange={handleDescription}
                             id="itemdescription"
                             rows={3}
-                            // placeholder={location.state.description}
-                             placeholder="description"
+                            placeholder={location.state.description}
                             required
                           ></CFormTextarea>
                         </CInputGroup>
