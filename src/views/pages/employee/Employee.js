@@ -58,6 +58,7 @@ const Employee = () => {
       setFilter(filteredRows);
     }
   };
+  console.log(data);
 
   return (
     <>
