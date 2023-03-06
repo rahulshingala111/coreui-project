@@ -1,4 +1,3 @@
-/* eslint-disable */
 const express = require("express");
 const mongoose = require("mongoose");
 const cookie = require("cookie");
@@ -6,8 +5,10 @@ const User = require("./schema/User"); //Scemma
 const Empl = require("./schema/Employee"); //Scema
 const Cate = require("./schema/Category"); //Scema
 const Prod = require("./schema/Product"); //Scema
+const Cart = require('./schema/Cart'); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const app = express();
 
 // //-------- image upload
 const multer = require("multer");
@@ -22,7 +23,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-const app = express();
+//header origin
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   res.setHeader("Access-Control-Request-Headers", "Set-Headers");
@@ -32,9 +33,13 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+// idk
 app.use(express.static(path.join(__dirname, "..", "public")));
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false, parameterLimit: 50000 }));
+
+//mongoose
 mongoose.set("strictQuery", true);
 mongoose.connect("mongodb://0.0.0.0:27017/coreuidb", {
   useNewUrlParser: true,
@@ -47,7 +52,7 @@ db.once("open", () => {
   console.log("Database connected");
 });
 
-//------------------
+// Login Register
 
 const checkUsername = (req, res, next) => {
   User.findOne({ username: req.body.username }, (err, succ) => {

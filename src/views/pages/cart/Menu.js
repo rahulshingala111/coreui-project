@@ -1,22 +1,6 @@
-/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import {
-    CAvatar,
-    CButton,
-    CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CProgress,
-    CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow, CContainer, CCardImage, CCardTitle, CCardText
+    CButton, CCard, CCardBody, CCol, CRow, CContainer, CCardImage, CCardTitle, CCardText
 } from "@coreui/react";
 import { AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 import axios from 'axios'

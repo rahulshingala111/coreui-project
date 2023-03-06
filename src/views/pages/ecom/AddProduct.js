@@ -1,22 +1,10 @@
-/* eslint-disable */
 import React, { useState, useEffect } from "react";
 import {
-  CAvatar,
   CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
-  CCardHeader,
   CCol,
-  CProgress,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
   CForm,
   CFormInput,
   CContainer,
@@ -27,7 +15,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { cilAlignLeft, cilDescription, cilLayers, cilImagePlus } from "@coreui/icons";
-import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
+import { AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 import axios from "axios";
 
 const AddProduct = () => {
