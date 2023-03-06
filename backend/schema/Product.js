@@ -6,6 +6,7 @@ const UserSchema = mongoose.Schema(
     category: String,
     description: String,
     image: String,
+    isCart: Boolean
   }
 );
 

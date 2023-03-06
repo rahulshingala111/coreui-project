@@ -47,7 +47,7 @@ const _nav = [
   },
   {
     component: CNavItem,
-    name: "All Item List",
+    name: "Menu",
     to: "/dashboard/product/menu",
     icon: <CIcon icon={cilClearAll} customClassName="nav-icon" />,
   },

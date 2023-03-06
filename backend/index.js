@@ -366,6 +366,36 @@ app.get("/dashboard/product/menu/showallitem", (req, res) => {
     }
   });
 });
+app.get("/dashbord/cart/showcartitem", (req, res) => {
+  Prod.find({ isCart: true }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else {
+      res.send(succ);
+    }
+  });
+});
+app.post("/dashbord/cart/updatecartitem", (req, res) => {
+  Prod.findByIdAndUpdate({ _id: req.body.id }, { "isCart": true }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else {
+      res.send(succ);
+    }
+  });
+});
+app.post("/dashbord/cart/deletecartitem", (req, res) => {
+  Prod.findByIdAndUpdate({ _id: req.body.id }, { "isCart": false }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      res.sendStatus(401);
+    } else {
+      res.send(succ);
+    }
+  });
+});
 
 
 const port = 5000;

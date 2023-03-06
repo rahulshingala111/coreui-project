@@ -22,12 +22,11 @@ import { AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 import axios from 'axios'
 
 const Menu = () => {
-    const [data, setData] = useState("");
+    const [data, setData] = useState();
 
     useEffect(() => {
         getData();
     }, []);
-
 
     const getData = async () => {
         await axios
@@ -39,7 +38,21 @@ const Menu = () => {
                 console.log(error);
             });
     }
-    console.log(data);
+
+    const handleCartUpdate = (e, user) => {
+        e.preventDefault();
+        axios
+            .post("http://localhost:5000/dashbord/cart/updatecartitem", {
+                id: user._id,
+            })
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     return (
         <>
             <div>
@@ -48,12 +61,12 @@ const Menu = () => {
                     <AppHeader />
                     <div className="body flex-grow-1 px-3">
                         <CContainer>
-                            <CRow xs={{ cols: 2, gutter: 2 }} lg={{ cols: 5, gutter: 3 }}>
-                                {data.map((user) => (
+                            <CRow xs={{ cols: 2, gutter: 2 }} lg={{ cols: 4, gutter: 4 }}>
+                                {data?.map((user) => (
                                     <>
                                         <CCol>
-                                            <CCard style={{ width: '18rem' }}>
-                                                <CCardImage orientation="top" href={user.image} />
+                                            <CCard style={{ width: '17rem' }}>
+                                                <CCardImage orientation="top" src={user.image} height="200px"></CCardImage>
                                                 <CCardBody>
                                                     <CCardTitle>{user.itemname}</CCardTitle>
                                                     <CCardText>
@@ -62,7 +75,7 @@ const Menu = () => {
                                                     <CCardText>
                                                         {user.description}
                                                     </CCardText>
-                                                    <CButton href="#">Add to Cart</CButton>
+                                                    <CButton onClick={(e) => handleCartUpdate(e, user)}>Add to Cart</CButton>
                                                 </CCardBody>
                                             </CCard>
                                         </CCol>
