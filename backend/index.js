@@ -380,10 +380,46 @@ app.get("/dashbord/cart/showcartitem", (req, res) => {
       res.sendStatus(401)
     }
     else {
-      res.send(succ)
-      console.log(succ);
+      //res.send(succ)
+      //console.log(succ);
+      Cart.aggregate([
+        {
+          $lookup: {
+            from: "products",
+            localField: "productid",
+            foreignField: "_id",
+            as: "result"
+          }
+        }
+      ]
+      ).then((result) => {
+        res.send(result);
+        console.log(result);
+      })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   })
+  // Prod.aggregate([
+  //   {
+  //     $lookup:{
+  //       from:"",
+  //       localField:"",
+  //       foreignField:"",
+  //       as:"result"
+  //     }
+  //   }
+  // ])
+  // Prod.find({ _id: req.headers.myheader }, (err, succ) => {
+  //   if(err){
+  //     console.log(err);
+  //     res.sendStatus(401)
+  //   }
+  //   else{
+  //     console.log(succ);
+  //   }
+  // })
 });
 
 app.post("/dashbord/cart/updatecartitem", (req, res) => {
