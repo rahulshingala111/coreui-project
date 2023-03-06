@@ -29,7 +29,7 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Request-Headers", "Set-Headers");
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With,Set-Headers"
+    "Content-Type, Access-Control-Allow-Headers,myheader,X-RapidAPI-Key, Authorization, X-Requested-With,Set-Headers"
   );
   next();
 });
@@ -190,7 +190,7 @@ app.get("/dashbord/employee/showUser", (req, res) => {
 });
 
 app.post("/dashboard/employee/editUser", (req, res) => {
-  const finduser = Empl.findById({ _id: req.body.id }, (err, succ) => {
+  Empl.findById({ _id: req.body.id }, (err, succ) => {
     if (err) {
       res.sendStatus(401).message("ERROR finding user!!");
     } else {
@@ -216,11 +216,11 @@ app.get("/dashboard/addemployee", (req, res) => {
   res.sendStatus(200);
 });
 app.post("/dashboard/addemployee/registeremployee", (req, res) => {
-  const abc = Empl.findOne({ password: req.body.password }, (err, succ) => {
+  Empl.findOne({ password: req.body.password }, (err, succ) => {
     if (succ === null) {
-      const bcd = Empl.findOne({ username: req.body.username }, (err, succ) => {
+      Empl.findOne({ username: req.body.username }, (err, succ) => {
         if (succ === null) {
-          const abcd = User.findOne({ username: req.body.createdBy }, (err, succ) => {
+          User.findOne({ username: req.body.createdBy }, (err, succ) => {
             if (err) {
               console.log(err);
             } else {
@@ -275,7 +275,7 @@ app.post("/dashboard/category/addcategory", (req, res) => {
 });
 
 app.post("/dashboard/category/editcategory", (req, res) => {
-  finduser = Cate.findById({ _id: req.body.id }, (err, succ) => {
+  Cate.findById({ _id: req.body.id }, (err, succ) => {
     if (err) {
       res.sendStatus(401).message("ERROR finding user!!");
     } else {
@@ -371,25 +371,39 @@ app.get("/dashboard/product/menu/showallitem", (req, res) => {
     }
   });
 });
+
+
 app.get("/dashbord/cart/showcartitem", (req, res) => {
-  Prod.find({ isCart: true }, (err, succ) => {
+  Cart.find({ userid: req.headers.myheader }, (err, succ) => {
     if (err) {
       console.log(err);
-      res.sendStatus(401);
-    } else {
-      res.send(succ);
+      res.sendStatus(401)
     }
-  });
+    else {
+      res.send(succ)
+      console.log(succ);
+    }
+  })
 });
+
 app.post("/dashbord/cart/updatecartitem", (req, res) => {
-  Prod.findByIdAndUpdate({ _id: req.body.id }, { "isCart": true }, (err, succ) => {
+  Cart.findOne({ productid: req.body.id }, (err, succ) => {
     if (err) {
-      console.log(err);
       res.sendStatus(401);
-    } else {
-      res.send(succ);
+      console.log(err);
     }
-  });
+    else if (succ !== null) {
+      res.sendStatus(401)
+      console.log("Already in cart");
+    } else {
+      Cart.insertMany({
+        productid: req.body.id,
+        userid: req.body.userid,
+        qty: 1,
+      })
+      res.sendStatus(200)
+    }
+  })
 });
 app.post("/dashbord/cart/deletecartitem", (req, res) => {
   Prod.findByIdAndUpdate({ _id: req.body.id }, { "isCart": false }, (err, succ) => {

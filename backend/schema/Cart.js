@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema(
     {
-        productId: mongoose.Schema.Types.ObjectId,
+        productid: mongoose.Schema.Types.ObjectId,
+        userid: String,
         qty: Number,
     }
 );

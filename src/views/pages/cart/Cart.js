@@ -1,26 +1,14 @@
 /* eslint-disable */
 import React, { useState, useEffect } from "react";
 import {
-    CAvatar,
-    CButton,
-    CButtonGroup,
-    CCard,
-    CCardBody,
-    CCardFooter,
-    CCardHeader,
-    CCol,
-    CProgress,
     CRow,
-    CTable,
-    CTableBody,
-    CTableDataCell,
-    CTableHead,
-    CTableHeaderCell,
-    CTableRow,
-    CCardImage, CCardTitle, CCardText, CContainer
+    CContainer,
+    CCol,CCard,CCardImage,CCardBody,CCardTitle,CCardText,CButton
 } from "@coreui/react";
 import { AppContent, AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 import axios from "axios";
+import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
 
 const Cart = () => {
 
@@ -30,9 +18,14 @@ const Cart = () => {
         getData();
     }, []);
 
-    const getData = async () => {
-        await axios
-            .get("http://localhost:5000/dashbord/cart/showcartitem")
+    const getData = () => {
+        const userId = jwt.decode(Cookies.get("token"), { complete: true });
+        axios
+            .get("http://localhost:5000/dashbord/cart/showcartitem", {
+                headers: {
+                    'myheader': userId.payload.username,
+                },
+            })
             .then((response) => {
                 setData(response.data);
             })
@@ -40,6 +33,7 @@ const Cart = () => {
                 console.log(error);
             });
     };
+
     const handleCartUpdate = (e, user) => {
         e.preventDefault();
         axios

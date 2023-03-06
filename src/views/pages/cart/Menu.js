@@ -4,6 +4,8 @@ import {
 } from "@coreui/react";
 import { AppSidebar, AppFooter, AppHeader } from "../../../components/index";
 import axios from 'axios'
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
 
 const Menu = () => {
     const [data, setData] = useState();
@@ -25,9 +27,14 @@ const Menu = () => {
 
     const handleCartUpdate = (e, user) => {
         e.preventDefault();
+
+        const userId = jwt.decode(Cookies.get("token"), { complete: true });
+        console.log(userId.payload.username);
+
         axios
             .post("http://localhost:5000/dashbord/cart/updatecartitem", {
                 id: user._id,
+                userid: userId.payload.username
             })
             .then((response) => {
                 console.log(response);
