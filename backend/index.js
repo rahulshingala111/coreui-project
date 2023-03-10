@@ -5,7 +5,7 @@ const User = require("./schema/User"); //Scemma
 const Empl = require("./schema/Employee"); //Scema
 const Cate = require("./schema/Category"); //Scema
 const Prod = require("./schema/Product"); //Scema
-const Cart = require('./schema/Cart'); //Scema
+const Cart = require("./schema/Cart"); //Scema
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const app = express();
@@ -336,15 +336,23 @@ app.post("/dashboard/product/addproduct", upload.single("file"), (req, res) => {
 });
 
 app.post("/dashboard/product/editproduct", upload.single("file"), (req, res) => {
-  Prod.findByIdAndUpdate({ _id: req.body.id }, { "itemname": req.body.itemname, "category": req.body.category, "description": req.body.description, "image": req.body.file }, (err, succ) => {
-    if (err) {
-      res.sendStatus(401);
-      console.log(err);
+  Prod.findByIdAndUpdate(
+    { _id: req.body.id },
+    {
+      itemname: req.body.itemname,
+      category: req.body.category,
+      description: req.body.description,
+      image: req.body.file,
+    },
+    (err, succ) => {
+      if (err) {
+        res.sendStatus(401);
+        console.log(err);
+      } else {
+        res.sendStatus(200);
+      }
     }
-    else {
-      res.sendStatus(200);
-    }
-  })
+  );
 });
 
 app.post("/dashboard/category/deleteproduct", (req, res) => {
@@ -372,54 +380,34 @@ app.get("/dashboard/product/menu/showallitem", (req, res) => {
   });
 });
 
-
 app.get("/dashbord/cart/showcartitem", (req, res) => {
   Cart.find({ userid: req.headers.myheader }, (err, succ) => {
     if (err) {
       console.log(err);
-      res.sendStatus(401)
-    }
-    else {
-      //res.send(succ)
-      //console.log(succ);
+      res.sendStatus(401);
+    } else {
       Cart.aggregate([
+        {
+          $match: { userid: req.headers.myheader },
+        },
         {
           $lookup: {
             from: "products",
             localField: "productid",
             foreignField: "_id",
-            as: "result"
-          }
-        }
-      ]
-      ).then((result) => {
-        res.send(result);
-        console.log(result);
-      })
+            as: "as",
+          },
+        },
+      ])
+        .then((result) => {
+          res.send(result);
+          //console.log(result);
+        })
         .catch((err) => {
           console.log(err);
         });
     }
-  })
-  // Prod.aggregate([
-  //   {
-  //     $lookup:{
-  //       from:"",
-  //       localField:"",
-  //       foreignField:"",
-  //       as:"result"
-  //     }
-  //   }
-  // ])
-  // Prod.find({ _id: req.headers.myheader }, (err, succ) => {
-  //   if(err){
-  //     console.log(err);
-  //     res.sendStatus(401)
-  //   }
-  //   else{
-  //     console.log(succ);
-  //   }
-  // })
+  });
 });
 
 app.post("/dashbord/cart/updatecartitem", (req, res) => {
@@ -427,31 +415,30 @@ app.post("/dashbord/cart/updatecartitem", (req, res) => {
     if (err) {
       res.sendStatus(401);
       console.log(err);
-    }
-    else if (succ !== null) {
-      res.sendStatus(401)
+    } else if (succ !== null) {
+      res.sendStatus(401);
       console.log("Already in cart");
     } else {
       Cart.insertMany({
         productid: req.body.id,
         userid: req.body.userid,
         qty: 1,
-      })
-      res.sendStatus(200)
+      });
+      res.sendStatus(200);
     }
-  })
+  });
 });
 app.post("/dashbord/cart/deletecartitem", (req, res) => {
-  Prod.findByIdAndUpdate({ _id: req.body.id }, { "isCart": false }, (err, succ) => {
+  Cart.findByIdAndDelete({ _id: req.body.id }, (err, succ) => {
     if (err) {
       console.log(err);
       res.sendStatus(401);
     } else {
-      res.send(succ);
+      res.sendStatus(200);
+      console.log("deleted success");
     }
   });
 });
-
 
 const port = 5000;
 app.listen(port, () => {
