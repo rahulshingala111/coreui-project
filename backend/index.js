@@ -411,22 +411,7 @@ app.get("/dashbord/cart/showcartitem", (req, res) => {
 });
 
 app.post("/dashbord/cart/updatecartitem", (req, res) => {
-  Cart.findOne({ productid: req.body.id }, (err, succ) => {
-    if (err) {
-      res.sendStatus(401);
-      console.log(err);
-    } else if (succ !== null) {
-      res.sendStatus(401);
-      console.log("Already in cart");
-    } else {
-      Cart.insertMany({
-        productid: req.body.id,
-        userid: req.body.userid,
-        qty: 1,
-      });
-      res.sendStatus(200);
-    }
-  });
+
 });
 app.post("/dashbord/cart/deletecartitem", (req, res) => {
   Cart.findByIdAndDelete({ _id: req.body.id }, (err, succ) => {

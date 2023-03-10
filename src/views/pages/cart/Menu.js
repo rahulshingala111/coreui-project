@@ -33,7 +33,7 @@ const Menu = () => {
       });
   };
 
-  const handleCartUpdate = (e, user) => {
+  const handleCartDelete = (e, user) => {
     e.preventDefault();
 
     const userId = jwt.decode(Cookies.get("token"), { complete: true });
@@ -46,6 +46,7 @@ const Menu = () => {
       })
       .then((response) => {
         console.log(response);
+        window.location="/dashboard/product/menu"
       })
       .catch((error) => {
         console.log(error);
@@ -70,7 +71,7 @@ const Menu = () => {
                           <CCardTitle>{user.itemname}</CCardTitle>
                           <CCardText>{user.category}</CCardText>
                           <CCardText>{user.description}</CCardText>
-                          <CButton onClick={(e) => handleCartUpdate(e, user)}>Add to Cart</CButton>
+                          <CButton onClick={(e) => handleCartDelete(e, user)}>Add to Cart</CButton>
                         </CCardBody>
                       </CCard>
                     </CCol>
