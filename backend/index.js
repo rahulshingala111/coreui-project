@@ -12,7 +12,6 @@ const app = express();
 
 // //-------- image upload
 const multer = require("multer");
-const { log } = require("console");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/images");
