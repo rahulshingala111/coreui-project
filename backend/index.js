@@ -400,7 +400,6 @@ app.get("/dashbord/cart/showcartitem", (req, res) => {
       ])
         .then((result) => {
           res.send(result);
-          //console.log(result);
         })
         .catch((err) => {
           console.log(err);
@@ -434,13 +433,12 @@ app.post("/dashbord/cart/updatecartitem", (req, res) => {
 });
 
 app.post("/dashbord/cart/deletecartitem", (req, res) => {
-  Cart.findByIdAndDelete({ _id: req.body.id }, (err, succ) => {
+  Cart.findByIdAndDelete({ _id: req.body.id, userid: req.body.userid }, (err, succ) => {
     if (err) {
       console.log(err);
       res.sendStatus(401);
     } else {
       res.sendStatus(200);
-      console.log("deleted success");
     }
   });
 });
