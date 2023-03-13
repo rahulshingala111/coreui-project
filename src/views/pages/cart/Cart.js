@@ -22,9 +22,9 @@ const Cart = () => {
   useEffect(() => {
     getData();
   }, []);
-
+  const userId = jwt.decode(Cookies.get("token"), { complete: true });
   const getData = async () => {
-    const userId = jwt.decode(Cookies.get("token"), { complete: true });
+    // const userId = jwt.decode(Cookies.get("token"), { complete: true });
     await axios
       .get("http://localhost:5000/dashbord/cart/showcartitem", {
         headers: {
@@ -44,6 +44,7 @@ const Cart = () => {
     axios
       .post("http://localhost:5000/dashbord/cart/deletecartitem", {
         id: user._id,
+        userid: userId.payload.username,
       })
       .then((response) => {
         console.log(response);

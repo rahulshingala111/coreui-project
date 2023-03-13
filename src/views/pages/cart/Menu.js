@@ -46,7 +46,7 @@ const Menu = () => {
       })
       .then((response) => {
         console.log(response);
-        window.location="/dashboard/product/menu"
+        //window.location="/dashboard/product/menu"
       })
       .catch((error) => {
         console.log(error);

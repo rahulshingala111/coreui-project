@@ -410,8 +410,29 @@ app.get("/dashbord/cart/showcartitem", (req, res) => {
 });
 
 app.post("/dashbord/cart/updatecartitem", (req, res) => {
-
+  Cart.find({ userid: req.body.userid, productid: req.body.id }, (err, succ) => {
+    if (err) {
+      console.log(err);
+      sendStatus(401)
+    }
+    else {
+      try {
+        if (succ[0].userid === req.body.userid) {
+          res.sendStatus(401);
+          console.log("Already in Cart");
+        }
+      } catch (e) {
+        Cart.insertMany({
+          productid: req.body.id,
+          userid: req.body.userid,
+          qty: 1,
+        });
+        res.sendStatus(200)
+      }
+    }
+  })
 });
+
 app.post("/dashbord/cart/deletecartitem", (req, res) => {
   Cart.findByIdAndDelete({ _id: req.body.id }, (err, succ) => {
     if (err) {
